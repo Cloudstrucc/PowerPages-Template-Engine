@@ -32,7 +32,7 @@
 #####################################
 
 # Configuration variables
-BASE_PATH="/Users/frederickpearson/projects/Public/portal/BuildGCWEB/files/"
+BASE_PATH="/Users/frederickpearson/repos/PowerPages-Template-Engine/BuildGCWEB/files/"
 BASE_PATH_SNIPPETS="${BASE_PATH}liquid/contentsnippets/snippets.json"
 BASE_PATH_TEMPLATES="${BASE_PATH}liquid/webtemplates/"
 PORTAL_BASIC_THEME_PATH="${BASE_PATH}portalbasictheme.css"
@@ -620,7 +620,7 @@ create_web_template() {
     local markup="$1"
     local filename="$2"
     
-    local filter="mspp_name eq '$filename'"
+    local filter="(mspp_name eq '$filename' and _mspp_websiteid_value eq $WEBSITE_ID)"
     local check_url="${API_URL}mspp_webtemplates?\$filter=$filter"
     local existing_templates
     existing_templates=$(get_record_api "$check_url")
@@ -798,7 +798,111 @@ create_snippets() {
         fi
     done <<< "$snippet_names"
 }
+# ========================================
+# CREATE FILE-BASED SNIPPETS (JS/CSS/HTML)
+# ========================================
+# This function scans a directory for .js, .css, and .html files
+# and creates content snippets for each file in both English and French.
+# The snippet name is derived from the filename (without extension).
+# The content is wrapped appropriately based on file type.
+#
+# Usage: create_file_snippets [optional_directory_path]
+# If no path provided, uses $BASE_PATH_SNIPPETS directory
+# ========================================
 
+create_file_snippets() {
+    local snippets_dir="${1:-$(dirname "$BASE_PATH_SNIPPETS")}"
+    
+    # Check if language IDs are set
+    if [[ -z "$ENGLISH_LANGUAGE_ID" || "$ENGLISH_LANGUAGE_ID" == "null" ]]; then
+        >&2 echo "ERROR: English Language ID is not set. Cannot create file snippets."
+        return 1
+    fi
+    
+    if [[ -z "$FRENCH_LANGUAGE_ID" || "$FRENCH_LANGUAGE_ID" == "null" ]]; then
+        >&2 echo "ERROR: French Language ID is not set. Cannot create file snippets."
+        return 1
+    fi
+    
+    >&2 echo "Scanning for JS/CSS/HTML files in: $snippets_dir"
+    
+    # Find all .js, .css, and .html files in the snippets directory
+    local files
+    files=$(find "$snippets_dir" -maxdepth 1 -type f \( -name "*.js" -o -name "*.css" -o -name "*.html" \) 2>/dev/null)
+    
+    if [[ -z "$files" ]]; then
+        >&2 echo "No JS/CSS/HTML files found in $snippets_dir"
+        return 0
+    fi
+    
+    while IFS= read -r file_path; do
+        [[ -z "$file_path" ]] && continue
+        
+        local filename
+        filename=$(basename "$file_path")
+        local extension="${filename##*.}"
+        local snippet_name="${filename%.*}"
+        
+        >&2 echo "Processing file: $filename"
+        
+        # Read file content (used as-is, no wrapping)
+        local file_content
+        file_content=$(cat "$file_path")
+        
+        # Create snippet for both languages (same content)
+        for lang in "EN" "FR"; do
+            local lang_id
+            if [[ "$lang" == "EN" ]]; then
+                lang_id="$ENGLISH_LANGUAGE_ID"
+            else
+                lang_id="$FRENCH_LANGUAGE_ID"
+            fi
+            
+            # Build the payload
+            local snippet_payload
+            snippet_payload=$(jq -n \
+                --arg name "$snippet_name" \
+                --arg website_id "$WEBSITE_ID" \
+                --arg value "$file_content" \
+                --arg lang_id "$lang_id" \
+                '{
+                    "mspp_name": $name,
+                    "mspp_websiteid@odata.bind": ("/mspp_websites(" + $website_id + ")"),
+                    "mspp_value": $value,
+                    "mspp_contentsnippetlanguageid@odata.bind": ("/mspp_websitelanguages(" + $lang_id + ")")
+                }')
+            
+            # URL-encode the snippet name for the filter
+            local encoded_snippet_name
+            encoded_snippet_name=$(printf '%s' "$snippet_name" | jq -sRr @uri)
+            
+            # Check if snippet already exists
+            local filter="(mspp_name%20eq%20'$encoded_snippet_name'%20and%20_mspp_contentsnippetlanguageid_value%20eq%20$lang_id)"
+            local check_url="${API_URL}mspp_contentsnippets?\$filter=$filter"
+            local existing_snippets
+            existing_snippets=$(get_record_api "$check_url")
+            
+            local existing_count
+            existing_count=$(echo "$existing_snippets" | jq -r '.value | length // 0')
+            
+            if [[ "$existing_count" -gt 0 ]]; then
+                >&2 echo "Updating existing snippet: $snippet_name ($lang)"
+                local existing_snippet_id
+                existing_snippet_id=$(echo "$existing_snippets" | jq -r '.value[0].mspp_contentsnippetid')
+                local update_url="${API_URL}mspp_contentsnippets($existing_snippet_id)"
+                update_record_api "$update_url" "$snippet_payload" > /dev/null 2>&1
+            else
+                create_record_api "${API_URL}mspp_contentsnippets" "$snippet_payload" > /dev/null 2>&1
+                >&2 echo "Created snippet: $snippet_name ($lang)"
+            fi
+        done
+        
+        >&2 echo "✓ Completed: $snippet_name (EN + FR)"
+        
+    done <<< "$files"
+    
+    >&2 echo "File snippets processing complete."
+}
 # Write templates
 write_templates() {
     local folder_path="$1"
@@ -884,14 +988,14 @@ run_portal_template_install() {
 # STEP 1: EXTRACT GCWEB FILES
 #####################################
     echo "Extracting theme files..."
-    unzip -o "$ZIP_FILE_PATH" -d "$EXTRACTION_PATH"
+    # unzip -o "$ZIP_FILE_PATH" -d "$EXTRACTION_PATH"
 
-#####################################
+
 # STEP 2: CREATE SNIPPETS
 #####################################
     echo "Creating snippets..."
-    create_snippets
-
+    # create_snippets
+    # create_file_snippets
 #####################################
 # STEP 3: CREATE TEMPLATES
 #####################################
@@ -911,13 +1015,13 @@ run_portal_template_install() {
     >&2 echo "DEBUG: HOME_PAGE_ID before write_hierarchy: $HOME_PAGE_ID"
     >&2 echo "DEBUG: Calling write_hierarchy with path: ${EXTRACTION_PATH}${THEME_ROOT_FOLDER_NAME}"
     
-    write_hierarchy "${EXTRACTION_PATH}${THEME_ROOT_FOLDER_NAME}" "$HOME_PAGE_ID"
+    # write_hierarchy "${EXTRACTION_PATH}${THEME_ROOT_FOLDER_NAME}" "$HOME_PAGE_ID"
 
 #####################################
 # STEP 6: UPSERT THE BASELINE STYLES REQUIRED BY POWER PAGES
 #####################################
     echo "Updating baseline styles..."
-    update_baseline_styles
+    # update_baseline_styles
     
     echo "Portal template installation complete!"
 }

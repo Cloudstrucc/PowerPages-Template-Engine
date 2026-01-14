@@ -1,4 +1,4 @@
-# PEPP Portal Enhancement Library - Usage Guide
+# Portal Enhancement Library - Usage Guide
 
 **Version:** 1.2
 
@@ -12,8 +12,8 @@
 
 1. [Overview](#overview)
 2. [Quick Start](#quick-start)
-3. [PEPP-Scripts-Base Functions](#pepp-scripts-base-functions)
-4. [PEPP-BasicForm-Library API](#pepp-basicform-library-api)
+3. [Scripts-Base Functions](#scripts-base-functions)
+4. [BasicForm-Library API](#basicform-library-api)
 5. [Configuration Guide](#configuration-guide)
 6. [Usage Examples](#usage-examples)
 7. [Advanced Scenarios](#advanced-scenarios)
@@ -23,15 +23,15 @@
 
 ## Overview
 
-The **PEPP (Portal Enhancement for Power Pages)** library provides three components that are already installed in your environment:
+The **(Portal Enhancement for Power Pages)** library provides three components that are already installed in your environment:
 
 | Component                        | Type                         | Purpose                | Location                  |
 | -------------------------------- | ---------------------------- | ---------------------- | ------------------------- |
-| **PEPP-Styles-Base**       | Web Template (CSS)           | Modal and form styling | Included in `cs-header` |
-| **PEPP-Scripts-Base**      | Web Template (JavaScript)    | Global modal handling  | Included in `cs-footer` |
-| **PEPP-BasicForm-Library** | Content Snippet (JavaScript) | Form-specific features | Include on form pages     |
+| **Styles-Base**       | Web Template (CSS)           | Modal and form styling | Included in `cs-header` |
+| **Scripts-Base**      | Web Template (JavaScript)    | Global modal handling  | Included in `cs-footer` |
+| **BasicForm-Library** | Content Snippet (JavaScript) | Form-specific features | Include on form pages     |
 
-### What PEPP Does Automatically
+### What Does Automatically
 
 ✅ **Detects modal buttons** - Create, Edit, Delete, Details, Lookup
 
@@ -57,21 +57,21 @@ Add this to any page with a Basic Form, Advanced Form, or Entity List:
 
 ```liquid
 {% comment %} Include the library {% endcomment %}
-{% include 'snippet' snippet_name:'PEPP-BasicForm-Library' %}
+{% include 'snippet' snippet_name:'BasicForm-Library' %}
 
 <script>
 // Initialize with defaults
-PEPPBasicForm.init();
+CSBasicForm.init();
 </script>
 ```
 
 ### With Configuration
 
 ```liquid
-{% include 'snippet' snippet_name:'PEPP-BasicForm-Library' %}
+{% include 'snippet' snippet_name:'BasicForm-Library' %}
 
 <script>
-PEPPBasicForm.init({
+CSBasicForm.init({
   colors: {
     primary: '#2b4380',
     primaryHover: '#1e2f5a',
@@ -91,9 +91,9 @@ PEPPBasicForm.init({
 
 ---
 
-## PEPP-Scripts-Base Functions
+## Scripts-Base Functions
 
-PEPP-Scripts-Base runs globally and has **no public API** - it works automatically. However, understanding its internal functions helps with debugging and customization.
+Scripts-Base runs globally and has **no public API** - it works automatically. However, understanding its internal functions helps with debugging and customization.
 
 ### Global Behavior
 
@@ -111,7 +111,7 @@ All operations log to console for debugging:
 
 ```javascript
 // Modal Detection
-🔥 PEPP-Scripts-Base LOADED - Version 1.1
+🔥 Scripts-Base LOADED - Version 1.1
 🎯 User clicked modal trigger button
 🔍 Checking for modals...
 Found 10 total modals in DOM
@@ -167,20 +167,20 @@ Automatically identifies and handles:
 
 ### No Configuration Needed
 
-PEPP-Scripts-Base requires  **no initialization or configuration** . It starts automatically when the page loads.
+Scripts-Base requires  **no initialization or configuration** . It starts automatically when the page loads.
 
 ---
 
-## PEPP-BasicForm-Library API
+## BasicForm-Library API
 
 ### Namespace
 
-All functions are available under the `PEPPBasicForm` namespace (aliased as `PEPP` internally).
+All functions are available under the `CSBasicForm` namespace (aliased as `CS` internally).
 
 ```javascript
-window.PEPPBasicForm.init({...});
-window.PEPPBasicForm.applyStyles();
-window.PEPPBasicForm.initRichTextEditor('cs_field');
+window.CSBasicForm.init({...});
+window.CSBasicForm.applyStyles();
+window.CSBasicForm.initRichTextEditor('cs_field');
 // etc.
 ```
 
@@ -188,7 +188,7 @@ window.PEPPBasicForm.initRichTextEditor('cs_field');
 
 ### Core Functions
 
-#### `PEPPBasicForm.init(config)`
+#### `CSBasicForm.init(config)`
 
 **Purpose:** Initialize the library with custom configuration
 
@@ -201,7 +201,7 @@ window.PEPPBasicForm.initRichTextEditor('cs_field');
 **Example:**
 
 ```javascript
-PEPPBasicForm.init({
+CSBasicForm.init({
   colors: {
     primary: '#2b4380',
     primaryHover: '#1e2f5a',
@@ -250,7 +250,7 @@ PEPPBasicForm.init({
 
 ### Styling Functions
 
-#### `PEPPBasicForm.applyStyles()`
+#### `CSBasicForm.applyStyles()`
 
 **Purpose:** Inject CSS styles for buttons and form controls
 
@@ -262,7 +262,7 @@ PEPPBasicForm.init({
 
 ```javascript
 // Called automatically by init(), but can be called manually:
-PEPPBasicForm.applyStyles();
+CSBasicForm.applyStyles();
 ```
 
 **Styles Applied:**
@@ -282,7 +282,7 @@ PEPPBasicForm.applyStyles();
 
 ---
 
-#### `PEPPBasicForm.cleanLookupButtons()`
+#### `CSBasicForm.cleanLookupButtons()`
 
 **Purpose:** Remove text from lookup buttons, showing only icons
 
@@ -294,11 +294,11 @@ PEPPBasicForm.applyStyles();
 
 ```javascript
 // Called automatically by init(), but can be called manually:
-PEPPBasicForm.cleanLookupButtons();
+CSBasicForm.cleanLookupButtons();
 
 // Or after dynamic content loads:
 setTimeout(function() {
-  PEPPBasicForm.cleanLookupButtons();
+  CSBasicForm.cleanLookupButtons();
 }, 500);
 ```
 
@@ -319,7 +319,7 @@ setTimeout(function() {
 
 ### Lookup Modal Functions
 
-#### `PEPPBasicForm.initLookupModalFixes()`
+#### `CSBasicForm.initLookupModalFixes()`
 
 **Purpose:** Initialize styling and text cleanup for lookup modals
 
@@ -332,7 +332,7 @@ setTimeout(function() {
 ```javascript
 // Called automatically by init() when features.lookupModals = true
 // Can be called manually:
-PEPPBasicForm.initLookupModalFixes();
+CSBasicForm.initLookupModalFixes();
 ```
 
 **What it does:**
@@ -361,7 +361,7 @@ PEPPBasicForm.initLookupModalFixes();
 
 ---
 
-#### `PEPPBasicForm.initLookupModalDisplay()`
+#### `CSBasicForm.initLookupModalDisplay()`
 
 **Purpose:** Handle nested lookup modal display within form modals
 
@@ -373,7 +373,7 @@ PEPPBasicForm.initLookupModalFixes();
 
 ```javascript
 // Called automatically by init() when features.lookupModals = true
-PEPPBasicForm.initLookupModalDisplay();
+CSBasicForm.initLookupModalDisplay();
 ```
 
 **What it does:**
@@ -396,7 +396,7 @@ PEPPBasicForm.initLookupModalDisplay();
 
 ---
 
-#### `PEPPBasicForm.initLookupSelectionHandler()`
+#### `CSBasicForm.initLookupSelectionHandler()`
 
 **Purpose:** Handle checkbox selection and field population in lookup modals
 
@@ -408,7 +408,7 @@ PEPPBasicForm.initLookupModalDisplay();
 
 ```javascript
 // Called automatically by init() when features.lookupModals = true
-PEPPBasicForm.initLookupSelectionHandler();
+CSBasicForm.initLookupSelectionHandler();
 ```
 
 **What it does:**
@@ -447,7 +447,7 @@ input#cs_contact_entityname    // Entity logical name (e.g., "contact")
 
 ### Rich Text Editor Functions
 
-#### `PEPPBasicForm.initRichTextEditor(fieldName)`
+#### `CSBasicForm.initRichTextEditor(fieldName)`
 
 **Purpose:** Initialize Quill.js rich text editor for a specific field
 
@@ -461,11 +461,11 @@ input#cs_contact_entityname    // Entity logical name (e.g., "contact")
 
 ```javascript
 // Initialize single field
-PEPPBasicForm.initRichTextEditor('cs_description');
+CSBasicForm.initRichTextEditor('cs_description');
 
 // Initialize multiple fields
 ['cs_description', 'cs_notes', 'cs_comments'].forEach(function(field) {
-  PEPPBasicForm.initRichTextEditor(field);
+  CSBasicForm.initRichTextEditor(field);
 });
 ```
 
@@ -524,7 +524,7 @@ PEPPBasicForm.initRichTextEditor('cs_description');
 
 ```javascript
 try {
-  PEPPBasicForm.initRichTextEditor('cs_description');
+  CSBasicForm.initRichTextEditor('cs_description');
 } catch (error) {
   console.error('Rich text initialization failed:', error);
 }
@@ -534,7 +534,7 @@ try {
 
 ### Configuration Object
 
-#### `PEPPBasicForm.config`
+#### `CSBasicForm.config`
 
 **Purpose:** Access or modify current configuration
 
@@ -563,10 +563,10 @@ try {
 **Example - Reading config:**
 
 ```javascript
-console.log(PEPPBasicForm.config.colors.primary);
+console.log(CSBasicForm.config.colors.primary);
 // Output: '#2b4380'
 
-console.log(PEPPBasicForm.config.richTextFields);
+console.log(CSBasicForm.config.richTextFields);
 // Output: ['cs_description', 'cs_notes']
 ```
 
@@ -574,13 +574,13 @@ console.log(PEPPBasicForm.config.richTextFields);
 
 ```javascript
 // Change primary color
-PEPPBasicForm.config.colors.primary = '#0066cc';
+CSBasicForm.config.colors.primary = '#0066cc';
 
 // Add rich text field
-PEPPBasicForm.config.richTextFields.push('cs_newfield');
+CSBasicForm.config.richTextFields.push('cs_newfield');
 
 // Re-apply styles
-PEPPBasicForm.applyStyles();
+CSBasicForm.applyStyles();
 ```
 
 **When to use:**
@@ -619,7 +619,7 @@ PEPPBasicForm.applyStyles();
 Use defaults for everything:
 
 ```javascript
-PEPPBasicForm.init();
+CSBasicForm.init();
 ```
 
 ### Color Customization
@@ -627,7 +627,7 @@ PEPPBasicForm.init();
 Change brand colors only:
 
 ```javascript
-PEPPBasicForm.init({
+CSBasicForm.init({
   colors: {
     primary: '#0066cc',
     primaryHover: '#0052a3',
@@ -641,7 +641,7 @@ PEPPBasicForm.init({
 Enable rich text editor only:
 
 ```javascript
-PEPPBasicForm.init({
+CSBasicForm.init({
   richTextFields: ['cs_description', 'cs_notes'],
   features: {
     lookupButtons: false,
@@ -658,7 +658,7 @@ PEPPBasicForm.init({
 Forms with lookup fields:
 
 ```javascript
-PEPPBasicForm.init({
+CSBasicForm.init({
   features: {
     lookupButtons: true,    // Style lookup buttons
     lookupModals: true,     // Handle lookup selection
@@ -674,7 +674,7 @@ PEPPBasicForm.init({
 All features enabled:
 
 ```javascript
-PEPPBasicForm.init({
+CSBasicForm.init({
   colors: {
     primary: '#2b4380',
     primaryHover: '#1e2f5a',
@@ -704,10 +704,10 @@ PEPPBasicForm.init({
 
 ```liquid
 {% comment %} Contact form with lookup {% endcomment %}
-{% include 'snippet' snippet_name:'PEPP-BasicForm-Library' %}
+{% include 'snippet' snippet_name:'BasicForm-Library' %}
 
 <script>
-PEPPBasicForm.init({
+CSBasicForm.init({
   features: {
     lookupButtons: true,
     lookupModals: true,
@@ -721,10 +721,10 @@ PEPPBasicForm.init({
 
 ```liquid
 {% comment %} Form with rich text and lookups {% endcomment %}
-{% include 'snippet' snippet_name:'PEPP-BasicForm-Library' %}
+{% include 'snippet' snippet_name:'BasicForm-Library' %}
 
 <script>
-PEPPBasicForm.init({
+CSBasicForm.init({
   richTextFields: ['cs_description', 'cs_notes'],
   features: {
     lookupButtons: true,
@@ -741,10 +741,10 @@ PEPPBasicForm.init({
 
 ```liquid
 {% comment %} Details view - no editor needed {% endcomment %}
-{% include 'snippet' snippet_name:'PEPP-BasicForm-Library' %}
+{% include 'snippet' snippet_name:'BasicForm-Library' %}
 
 <script>
-PEPPBasicForm.init({
+CSBasicForm.init({
   features: {
     lookupButtons: false,
     lookupModals: false,
@@ -759,10 +759,10 @@ PEPPBasicForm.init({
 ### Example 4: Custom Brand Colors
 
 ```liquid
-{% include 'snippet' snippet_name:'PEPP-BasicForm-Library' %}
+{% include 'snippet' snippet_name:'BasicForm-Library' %}
 
 <script>
-PEPPBasicForm.init({
+CSBasicForm.init({
   colors: {
     primary: '#d32f2f',       // Red theme
     primaryHover: '#b71c1c',
@@ -779,20 +779,20 @@ PEPPBasicForm.init({
 ### Example 5: Dynamic Rich Text
 
 ```liquid
-{% include 'snippet' snippet_name:'PEPP-BasicForm-Library' %}
+{% include 'snippet' snippet_name:'BasicForm-Library' %}
 
 <script>
 // Initialize without rich text
-PEPPBasicForm.init();
+CSBasicForm.init();
 
 // Add rich text to specific fields dynamically
 document.addEventListener('DOMContentLoaded', function() {
   if (document.querySelector('#cs_description')) {
-    PEPPBasicForm.initRichTextEditor('cs_description');
+    CSBasicForm.initRichTextEditor('cs_description');
   }
   
   if (document.querySelector('#cs_notes')) {
-    PEPPBasicForm.initRichTextEditor('cs_notes');
+    CSBasicForm.initRichTextEditor('cs_notes');
   }
 });
 </script>
@@ -801,10 +801,10 @@ document.addEventListener('DOMContentLoaded', function() {
 ### Example 6: Multi-Step Form
 
 ```liquid
-{% include 'snippet' snippet_name:'PEPP-BasicForm-Library' %}
+{% include 'snippet' snippet_name:'BasicForm-Library' %}
 
 <script>
-PEPPBasicForm.init({
+CSBasicForm.init({
   colors: {
     primary: '#2b4380'
   },
@@ -817,8 +817,8 @@ PEPPBasicForm.init({
 function onStepChange(stepNumber) {
   // Clean buttons on new step
   setTimeout(function() {
-    PEPPBasicForm.cleanLookupButtons();
-    PEPPBasicForm.applyStyles();
+    CSBasicForm.cleanLookupButtons();
+    CSBasicForm.applyStyles();
   }, 100);
 }
 </script>
@@ -827,22 +827,22 @@ function onStepChange(stepNumber) {
 ### Example 7: AJAX Form Updates
 
 ```liquid
-{% include 'snippet' snippet_name:'PEPP-BasicForm-Library' %}
+{% include 'snippet' snippet_name:'BasicForm-Library' %}
 
 <script>
-PEPPBasicForm.init({
+CSBasicForm.init({
   richTextFields: ['cs_description']
 });
 
 // After AJAX update
 function afterFormUpdate() {
   // Re-apply button styles
-  PEPPBasicForm.cleanLookupButtons();
-  PEPPBasicForm.applyStyles();
+  CSBasicForm.cleanLookupButtons();
+  CSBasicForm.applyStyles();
   
   // Re-initialize rich text if field was replaced
   if (document.querySelector('#cs_description')) {
-    PEPPBasicForm.initRichTextEditor('cs_description');
+    CSBasicForm.initRichTextEditor('cs_description');
   }
 }
 
@@ -869,7 +869,7 @@ Enable rich text based on user role or form state:
 var isAdmin = {{ user.roles contains 'Administrator' }};
 var richTextFields = isAdmin ? ['cs_description', 'cs_notes'] : [];
 
-PEPPBasicForm.init({
+CSBasicForm.init({
   richTextFields: richTextFields,
   features: {
     richTextEditor: isAdmin
@@ -882,7 +882,7 @@ PEPPBasicForm.init({
 Modify the library to add custom toolbar options:
 
 ```javascript
-// In PEPP-BasicForm-Library, find initRichTextEditor function
+// In BasicForm-Library, find initRichTextEditor function
 // Modify the toolbar configuration:
 
 const quill = new Quill(`#${CSS.escape(fieldName)}_editor`, {
@@ -913,7 +913,7 @@ const quill = new Quill(`#${CSS.escape(fieldName)}_editor`, {
 Handle custom entity attributes:
 
 ```javascript
-// After PEPPBasicForm.init(), add custom handler
+// After CSBasicForm.init(), add custom handler
 document.addEventListener('click', function(e) {
   const selectButton = e.target.closest('.modal-lookup .btn.primary');
   
@@ -939,7 +939,7 @@ document.addEventListener('click', function(e) {
 ### Form Validation Integration
 
 ```javascript
-PEPPBasicForm.init({
+CSBasicForm.init({
   richTextFields: ['cs_description']
 });
 
@@ -962,7 +962,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
 
 ```javascript
 // Initialize once globally
-PEPPBasicForm.init({
+CSBasicForm.init({
   colors: {
     primary: '#2b4380'
   }
@@ -973,9 +973,9 @@ document.querySelectorAll('.entity-form').forEach(function(form) {
   const formId = form.getAttribute('data-form-id');
   
   if (formId === 'contact-form') {
-    PEPPBasicForm.initRichTextEditor('cs_contact_notes');
+    CSBasicForm.initRichTextEditor('cs_contact_notes');
   } else if (formId === 'account-form') {
-    PEPPBasicForm.initRichTextEditor('cs_account_description');
+    CSBasicForm.initRichTextEditor('cs_account_description');
   }
 });
 ```
@@ -985,7 +985,7 @@ document.querySelectorAll('.entity-form').forEach(function(form) {
 Extend with additional button styles:
 
 ```javascript
-PEPPBasicForm.init();
+CSBasicForm.init();
 
 // Add custom styles after initialization
 const customStyle = document.createElement('style');
@@ -1012,10 +1012,10 @@ Enable verbose logging:
 
 ```javascript
 // Check if library loaded
-console.log('PEPP loaded:', typeof PEPPBasicForm !== 'undefined');
+console.log('loaded:', typeof CSBasicForm !== 'undefined');
 
 // Check configuration
-console.log('PEPP config:', PEPPBasicForm.config);
+console.log('config:', CSBasicForm.config);
 
 // Check for modals
 console.log('Modals in DOM:', document.querySelectorAll('.modal').length);
@@ -1046,7 +1046,7 @@ document.querySelector('.modal-form');     // Modal exists in DOM?
 
 **Solution:**
 
-* Verify PEPP-Scripts-Base is in footer template
+* Verify Scripts-Base is in footer template
 * Check console for JavaScript errors
 * Ensure modal HTML is in page
 
@@ -1071,7 +1071,7 @@ console.log('Hidden field:', document.querySelector(`#${fieldName}`));
 
 * Verify field names match schema names exactly
 * Check `features.lookupModals: true`
-* Ensure PEPP-BasicForm-Library is included
+* Ensure BasicForm-Library is included
 
 #### Issue: Rich Text Not Loading
 
@@ -1103,7 +1103,7 @@ console.log('Editor div:', document.querySelector('#cs_description_editor'));
 
 ```javascript
 // Check styles applied:
-console.log('Style tag:', document.querySelector('#pepp-basicform-styles'));
+console.log('Style tag:', document.querySelector('#basicform-styles'));
 
 // Check button exists:
 console.log('Lookup button:', document.querySelector('.launchentitylookup'));
@@ -1111,7 +1111,7 @@ console.log('Lookup button:', document.querySelector('.launchentitylookup'));
 
 **Solution:**
 
-* Call `PEPPBasicForm.applyStyles()` manually
+* Call `CSBasicForm.applyStyles()` manually
 * Check `features.lookupButtons: true`
 * Verify buttons have correct classes
 
@@ -1137,14 +1137,14 @@ console.log('Lookup z-index:', window.getComputedStyle(lookupModal).zIndex);
 **Solution:**
 
 * Ensure `features.lookupModals: true`
-* Check PEPP-Styles-Base loaded (z-index rules)
+* Check Styles-Base loaded (z-index rules)
 * Verify both modals in DOM
 
 ---
 
 ## Function Reference Summary
 
-### PEPP-Scripts-Base (Global, Auto-Running)
+### Scripts-Base (Global, Auto-Running)
 
 | Function             | Type     | Description                                   |
 | -------------------- | -------- | --------------------------------------------- |
@@ -1159,7 +1159,7 @@ console.log('Lookup z-index:', window.getComputedStyle(lookupModal).zIndex);
 
 ---
 
-### PEPP-BasicForm-Library (Public API)
+### BasicForm-Library (Public API)
 
 | Function                          | Parameters            | Returns  | Description                           |
 | --------------------------------- | --------------------- | -------- | ------------------------------------- |
@@ -1181,8 +1181,8 @@ console.log('Lookup z-index:', window.getComputedStyle(lookupModal).zIndex);
 
 For issues, questions, or enhancements:
 
-1. **Check Console Logs** - Look for 🔥 PEPP log messages
-2. **Review Configuration** - Verify `PEPPBasicForm.config`
+1. **Check Console Logs** - Look for 🔥 log messages
+2. **Review Configuration** - Verify `CSBasicForm.config`
 3. **Test in Isolation** - Minimal configuration first
 4. **Document Issue** - Include browser, console logs, configuration
 
