@@ -946,7 +946,7 @@ write_templates() {
 update_home_page() {
     local page_template_name="$1"
     
-    local filter="mspp_name eq '$page_template_name'"
+    local filter="(mspp_name eq '$page_template_name' and _mspp_websiteid_value eq $WEBSITE_ID)"
     local check_url="${API_URL}mspp_pagetemplates?\$filter=$filter"
     local existing_templates
     existing_templates=$(get_record_api "$check_url")
