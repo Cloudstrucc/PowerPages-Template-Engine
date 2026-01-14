@@ -48,6 +48,9 @@ WEB_TEMPLATE_HEADER="CS-header"
 WEB_TEMPLATE_FOOTER="CS-footer"
 ENGLISH_LANGUAGE_CODE=1033
 FRENCH_LANGUAGE_CODE=1036
+LOGO_BW_CONTRAST_PATH="${BASE_PATH}logo-bw-contrast.png"
+LOGO_INVERT_PATH="${BASE_PATH}logo-invert.png"
+LANDSCAPE_PATH="${BASE_PATH}landscape.png"
 
 # URL encode function for query parameters
 urlencode() {
@@ -297,6 +300,9 @@ update_baseline_styles() {
     create_web_file "$BOOTSTRAP_PATH" "$HOME_PAGE_ID"
     create_web_file "$FAVICON_PATH" "$HOME_PAGE_ID"
     create_web_file "$CUSTOMCSS_PATH" "$HOME_PAGE_ID"
+    create_web_file "$LOGO_BW_CONTRAST_PATH" "$HOME_PAGE_ID"
+    create_web_file "$LOGO_INVERT_PATH" "$HOME_PAGE_ID"
+    create_web_file "$LANDSCAPE_PATH" "$HOME_PAGE_ID"
 }
 
 # Get relative path
@@ -1021,7 +1027,7 @@ run_portal_template_install() {
 # STEP 6: UPSERT THE BASELINE STYLES REQUIRED BY POWER PAGES
 #####################################
     echo "Updating baseline styles..."
-    # update_baseline_styles
+    update_baseline_styles
     
     echo "Portal template installation complete!"
 }
