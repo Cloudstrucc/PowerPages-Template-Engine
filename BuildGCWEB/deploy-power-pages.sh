@@ -103,6 +103,7 @@ setup_config() {
         BLOB_ADDRESS=$(echo "$JSON_CONFIG" | jq -r '.blobAddress')
         FLOW_URL=$(echo "$JSON_CONFIG" | jq -r '.FlowURL')
         CLIENT_SECRET=$(echo "$JSON_CONFIG" | jq -r '.clientSecret')
+        ZIP_FILE_PATH=$(echo "$JSON_CONFIG" | jq -r '.themeZipPath')
     else
         echo "Enter the value for clientId:"
         read -r CLIENT_ID
@@ -128,6 +129,10 @@ setup_config() {
         
         echo "Enter the value for clientSecret:"
         read -rs CLIENT_SECRET
+
+        echo "Enter the full path to the theme ZIP file:"
+        read -r ZIP_FILE_PATH
+        
         echo
     fi
     
