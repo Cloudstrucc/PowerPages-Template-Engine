@@ -1,3 +1,9 @@
+{% comment %}
+  Stylish Portfolio Theme - Wizard Step Template
+  Based on Start Bootstrap Stylish Portfolio v6.0.6
+  Adapted for Power Pages by CloudStrucc
+{% endcomment %}
+
 {% extends 'CS-Layout-1-Column-with-Left-Nav' %}
 
 {% block navigation %} 
@@ -8,13 +14,13 @@
 {% assign currentPage = page %}
 {% if currentPage.parent %}
     {% assign parentPage = currentPage.parent %}
-      {% include "CS-Weblink-List-Group-Left" weblink_set_name: parentPage.title showdescriptions: true %}
+    {% include "CS-Weblink-List-Group-Left" weblink_set_name: parentPage.title showdescriptions: true %}
 {% endif %}
 
 {% endblock %}
 
 {% block main %}
-  {% include 'CS-Validation-Wizard-Step'%}
+  {% include 'CS-Validation-Wizard-Step' %}
   {% include 'Page Copy' %}   
 
   {% if page.adx_entitylist %}
@@ -23,25 +29,53 @@
   
   {% if page.adx_entityform %}
   <style>
-  h2 {
-    display: block;
-    font-size: 1.3em;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    margin-left: 0;
-    margin-right: 0;
-    font-weight: bold;
-  }
-</style>
+    /* Stylish Portfolio Form Heading Styles */
+    .sp-form-section h2 {
+      display: block;
+      font-size: 1.3em;
+      margin-top: 1.5em;
+      margin-bottom: 1em;
+      font-weight: 600;
+      color: var(--sp-primary);
+      border-bottom: 2px solid var(--sp-secondary);
+      padding-bottom: 0.5em;
+    }
     
+    .sp-form-section h3 {
+      font-size: 1.1em;
+      margin-top: 1em;
+      margin-bottom: 0.75em;
+      font-weight: 600;
+      color: var(--sp-dark);
+    }
+    
+    /* Validation Summary Styling */
+    .validation-summary {
+      background-color: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 0.375rem;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .validation-summary ul {
+      margin-bottom: 0;
+      padding-left: 1.5rem;
+    }
+    
+    .validation-summary li {
+      color: #856404;
+    }
+  </style>
+  
+  <div class="sp-form-section">
     {% entityform id: page.adx_entityform.id %}
+  </div>
 
- <script>
-       
-     //  jQuery(".instructions").detach().appendTo('#instructions');
-       jQuery(".validation-summary").detach().appendTo('#step-validation-header')       
- 
- </script>
+  <script>
+    // Move validation summary to step header
+    jQuery(".validation-summary").detach().appendTo('#step-validation-header');
+  </script>
  
   {% endif %}
   

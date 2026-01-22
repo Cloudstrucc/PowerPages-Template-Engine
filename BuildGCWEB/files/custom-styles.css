@@ -2,14 +2,12 @@
 /* Upload this as a Web File in Power Pages */
 
 :root {
-  --fip-red: #26374a;
-  --ec-yellow: #FAD714;
-  --ec-blue: #005A9B;
-  --ec-green: #008750;
-  --ec-light-gray: #C8C8C8;
-  --ec-dark-gray: #4B4B4B;
-  --ec-border-gray: #E0E0E0;
-  --pewter-grey: #969696;
+  --sp-primary: #1D809F;        /* Primary brand color */
+  --sp-primary-dark: #17667f;   /* Darker primary for hover states */
+  --sp-secondary: #ecb807;      /* Accent/secondary color */
+  --sp-dark: #212529;           /* Dark text/backgrounds */
+  --sp-light: #f8f9fa;          /* Light backgrounds */
+  --sp-gray: #6c757d;           /* Muted text */
 }
 
 .bg-primary-ec {

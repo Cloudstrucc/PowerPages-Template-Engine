@@ -1,66 +1,183 @@
-<footer id="wb-info">
-	<h2 class="wb-inv">About this site</h2>
-
-
-	<div class="gc-main-footer">
-		<div class="container">
-		
-		</div>
-	</div>
-
-	
-</footer>
-
-
-<script src="/wet-boew/js/i18n/en.min.js"></script><script src="/wet-boew/js/deps/jquery.magnific-popup.min.js"></script><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha384-rY/jv8mMhqDabXSo+UCggqKtdmBfd3qC2/KvyTDNQ6PcUJXaxK1tMepoQda4g5vB" crossorigin="anonymous"></script>
-<script src="/wet-boew/js/wet-boew.min.js"></script><span id="wb-rsz" class="wb-init">&nbsp;</span>
-<script src="/GCWeb/js/theme.min.js"></script>
-
 {% comment %}
-footer role='contentinfo' class='footer'>
-  <div class='footer-bottom hidden-print'>
-    <div class='container'>
-      <div class='row'>
-        <div class='col-md-9 col-sm-9 col-xs-9 text-left'>
-          {% editable snippets 'Footer' type: 'html' %}
-        </div>
-        <div id='accessibilityLinkContainer' class='col-md-3 col-sm-3 col-xs-3 text-right'></div>
+  Stylish Portfolio Theme - Footer Template
+  Based on Start Bootstrap Stylish Portfolio v6.0.6
+  Adapted for Power Pages by CloudStrucc
+{% endcomment %}
+
+{% if user %}
+{%- comment -%} AUTHENTICATED USER FOOTER - Compact {%- endcomment -%}
+
+<footer class="footer text-center" style="background-color: #212529; padding: 2rem 0;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 text-center" style="text-align: left !important;">
+        <p class="text-muted small mb-0">
+          &copy; {{ 'now' | date: "%Y" }} {{ snippets['SP/FOOTER/COPYRIGHT'] | default: 'Your Company' }}. All rights reserved.
+        </p>
+      </div>
+      <div class="col-md-6 text-center" style="text-align: right !important;">
+        <ul class="list-inline mb-0">
+          {% if sitemarkers['FooterLink1'] %}
+            <li class="list-inline-item"><a href="{{ sitemarkers['FooterLink1'].url }}" class="text-muted small">{{ snippets['SP/FOOTER/LINK1'] | default: 'Terms' }}</a></li>
+          {% endif %}
+          {% if sitemarkers['FooterLink2'] %}
+            <li class="list-inline-item"><a href="{{ sitemarkers['FooterLink2'].url }}" class="text-muted small">{{ snippets['SP/FOOTER/LINK2'] | default: 'Privacy' }}</a></li>
+          {% endif %}
+          {% if sitemarkers['FooterLink3'] %}
+            <li class="list-inline-item"><a href="{{ sitemarkers['FooterLink3'].url }}" class="text-muted small">{{ snippets['SP/FOOTER/LINK3'] | default: 'Contact' }}</a></li>
+          {% endif %}
+        </ul>
       </div>
     </div>
   </div>
 </footer>
 
-<script type='text/javascript'>
-  window.onload = function () {
-    const accessibilityLinkContainer = document.getElementById('accessibilityLinkContainer');
-    switch (window.navigator.language) {
-      case 'fr':
-        if (accessibilityLinkContainer != null) {
-          const accessibilityText = 'Accessibilité : partiellement conforme';
-          const frenchAccessibilityAnchor = document.createElement('a');
-          frenchAccessibilityAnchor.id = 'frenchAccesssibleLink';
-          frenchAccessibilityAnchor.target = '_blank';
-          frenchAccessibilityAnchor.href = 'https://go.microsoft.com/fwlink/?linkid=2163806';
-          frenchAccessibilityAnchor.title = accessibilityText;
-          frenchAccessibilityAnchor.innerText = accessibilityText;
-          accessibilityLinkContainer.appendChild(frenchAccessibilityAnchor);
-        }
-        break;
-      case 'it':
-        if (accessibilityLinkContainer != null) {
-          const accessibilityText = 'Accessibilità: parzialmente conforme';
-          const italianAccessibilityAnchor = document.createElement('a');
-          italianAccessibilityAnchor.id = 'italianAccesssibleLink';
-          italianAccessibilityAnchor.target = '_blank';
-          italianAccessibilityAnchor.href = 'https://go.microsoft.com/fwlink/?linkid=2208177';
-          italianAccessibilityAnchor.title = accessibilityText;
-          italianAccessibilityAnchor.innerText = accessibilityText;
-          accessibilityLinkContainer.appendChild(italianAccessibilityAnchor);
-        }
-        break;
-      default:
-        accessibilityLinkContainer.remove();
+{% else %}
+{%- comment -%} ANONYMOUS USER FOOTER - Full styled footer {%- endcomment -%}
+
+<footer class="footer text-center">
+  <div class="container px-4 px-lg-5">
+    <!-- Social Links -->
+    <ul class="list-inline mb-5">
+      {% if snippets['SP/SOCIAL/FACEBOOK'] %}
+      <li class="list-inline-item">
+        <a class="social-link rounded-circle text-white" href="{{ snippets['SP/SOCIAL/FACEBOOK'] }}" target="_blank" rel="noopener">
+          <i class="icon-social-facebook"></i>
+        </a>
+      </li>
+      {% endif %}
+      {% if snippets['SP/SOCIAL/TWITTER'] %}
+      <li class="list-inline-item">
+        <a class="social-link rounded-circle text-white" href="{{ snippets['SP/SOCIAL/TWITTER'] }}" target="_blank" rel="noopener">
+          <i class="icon-social-twitter"></i>
+        </a>
+      </li>
+      {% endif %}
+      {% if snippets['SP/SOCIAL/LINKEDIN'] %}
+      <li class="list-inline-item">
+        <a class="social-link rounded-circle text-white" href="{{ snippets['SP/SOCIAL/LINKEDIN'] }}" target="_blank" rel="noopener">
+          <i class="icon-social-linkedin"></i>
+        </a>
+      </li>
+      {% endif %}
+      {% if snippets['SP/SOCIAL/GITHUB'] %}
+      <li class="list-inline-item">
+        <a class="social-link rounded-circle text-white" href="{{ snippets['SP/SOCIAL/GITHUB'] }}" target="_blank" rel="noopener">
+          <i class="icon-social-github"></i>
+        </a>
+      </li>
+      {% endif %}
+      {% comment %} Default social icons if no snippets configured {% endcomment %}
+      {% unless snippets['SP/SOCIAL/FACEBOOK'] or snippets['SP/SOCIAL/TWITTER'] or snippets['SP/SOCIAL/LINKEDIN'] or snippets['SP/SOCIAL/GITHUB'] %}
+      <li class="list-inline-item">
+        <a class="social-link rounded-circle text-white" href="#!"><i class="icon-social-facebook"></i></a>
+      </li>
+      <li class="list-inline-item">
+        <a class="social-link rounded-circle text-white" href="#!"><i class="icon-social-twitter"></i></a>
+      </li>
+      <li class="list-inline-item">
+        <a class="social-link rounded-circle text-white" href="#!"><i class="icon-social-github"></i></a>
+      </li>
+      {% endunless %}
+    </ul>
+    
+    <p class="text-muted small mb-0">
+      &copy; {{ 'now' | date: "%Y" }} {{ snippets['SP/FOOTER/COPYRIGHT'] | default: 'Your Website' }}. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+<!-- Scroll to Top Button -->
+<a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+
+{% endif %}
+
+<!-- Bootstrap core JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Stylish Portfolio Theme JS -->
+<script>
+window.addEventListener('DOMContentLoaded', event => {
+  const sidebarWrapper = document.getElementById('sidebar-wrapper');
+  let scrollToTopVisible = false;
+  
+  // Menu toggle functionality
+  const menuToggle = document.body.querySelector('.menu-toggle');
+  if (menuToggle && sidebarWrapper) {
+    menuToggle.addEventListener('click', event => {
+      event.preventDefault();
+      sidebarWrapper.classList.toggle('active');
+      _toggleMenuIcon();
+      menuToggle.classList.toggle('active');
+    });
+  }
+
+  // Close sidebar when clicking nav links
+  var scrollTriggerList = [].slice.call(document.querySelectorAll('#sidebar-wrapper .sidebar-nav-item a'));
+  scrollTriggerList.map(scrollTrigger => {
+    scrollTrigger.addEventListener('click', () => {
+      if (sidebarWrapper) {
+        sidebarWrapper.classList.remove('active');
+      }
+      if (menuToggle) {
+        menuToggle.classList.remove('active');
+      }
+      _toggleMenuIcon();
+    });
+  });
+
+  function _toggleMenuIcon() {
+    const menuToggleBars = document.body.querySelector('.menu-toggle > .fa-bars');
+    const menuToggleTimes = document.body.querySelector('.menu-toggle > .fa-xmark');
+    if (menuToggleBars) {
+      menuToggleBars.classList.remove('fa-bars');
+      menuToggleBars.classList.add('fa-xmark');
     }
-  };
+    if (menuToggleTimes) {
+      menuToggleTimes.classList.remove('fa-xmark');
+      menuToggleTimes.classList.add('fa-bars');
+    }
+  }
+
+  // Scroll to top button
+  document.addEventListener('scroll', () => {
+    const scrollToTop = document.body.querySelector('.scroll-to-top');
+    if (scrollToTop) {
+      if (document.documentElement.scrollTop > 100) {
+        if (!scrollToTopVisible) {
+          fadeIn(scrollToTop);
+          scrollToTopVisible = true;
+        }
+      } else {
+        if (scrollToTopVisible) {
+          fadeOut(scrollToTop);
+          scrollToTopVisible = false;
+        }
+      }
+    }
+  });
+});
+
+function fadeOut(el) {
+  el.style.opacity = 1;
+  (function fade() {
+    if ((el.style.opacity -= .1) < 0) {
+      el.style.display = "none";
+    } else {
+      requestAnimationFrame(fade);
+    }
+  })();
+}
+
+function fadeIn(el, display) {
+  el.style.opacity = 0;
+  el.style.display = display || "block";
+  (function fade() {
+    var val = parseFloat(el.style.opacity);
+    if (!((val += .1) > 1)) {
+      el.style.opacity = val;
+      requestAnimationFrame(fade);
+    }
+  })();
+}
 </script>
-{% endcomment %}

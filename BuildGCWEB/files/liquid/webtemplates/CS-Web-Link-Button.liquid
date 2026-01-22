@@ -1,31 +1,129 @@
+{% comment %}
+  Stylish Portfolio Theme - Web Link Button (Pagination) Template
+  Based on Start Bootstrap Stylish Portfolio v6.0.6
+  Adapted for Power Pages by CloudStrucc
+{% endcomment %}
+
 {% assign weblink_set_name = weblink_set_name %}
 
 {% if weblink_set_name %}
   {% assign weblink_set = weblinks[weblink_set_name] %}
   {% if weblink_set %}
-      {% assign i = 0 %}
-      {% for link in weblink_set.weblinks %}
-        {% if i != 0 %}
-            {% assign i_minus_1 = i | minus: 1 %}
-            {% assign previousLink = weblink_set.weblinks[i_minus_1] %}
-        {% endif %}
-
-        {% if link.url == request.path %}
-            {% break %}
-        {% endif %}
-
-        {% assign i = i | plus: 1 %}
-      {% endfor %}
-
-
-        {% assign i_plus_1 = i | plus: 1 %}
-      {% if weblink_set.weblinks.size != i_plus_1 %}
-        {% assign nextLink = weblink_set.weblinks[i_plus_1] %}
+    {% assign i = 0 %}
+    {% for link in weblink_set.weblinks %}
+      {% if i != 0 %}
+        {% assign i_minus_1 = i | minus: 1 %}
+        {% assign previousLink = weblink_set.weblinks[i_minus_1] %}
       {% endif %}
-      
-    <ul class="pager">
-      <li class="previous{% if previousLink %}{% else %} disabled{% endif %}"><a href="{{ previousLink.url }}{{ request.query }}" rel="prev">Previous</a></li>
-      <li class="next{% if nextLink %}{% else %} disabled{% endif %}"><a href="{{ nextLink.url }}{{ request.query }}" rel="next">Next</a></li>
-    </ul>
- {% endif %}
+
+      {% if link.url == request.path %}
+        {% break %}
+      {% endif %}
+
+      {% assign i = i | plus: 1 %}
+    {% endfor %}
+
+    {% assign i_plus_1 = i | plus: 1 %}
+    {% if weblink_set.weblinks.size != i_plus_1 %}
+      {% assign nextLink = weblink_set.weblinks[i_plus_1] %}
+    {% endif %}
+    
+    <nav aria-label="Page navigation" class="sp-pagination-nav">
+      <ul class="sp-pager">
+        <li class="sp-pager-prev{% unless previousLink %} disabled{% endunless %}">
+          {% if previousLink %}
+            <a href="{{ previousLink.url }}{{ request.query }}" rel="prev">
+              <i class="fas fa-chevron-left" aria-hidden="true"></i>
+              <span>{{ snippets['SP/NAV/PREVIOUS'] | default: 'Previous' }}</span>
+            </a>
+          {% else %}
+            <span class="disabled-link">
+              <i class="fas fa-chevron-left" aria-hidden="true"></i>
+              <span>{{ snippets['SP/NAV/PREVIOUS'] | default: 'Previous' }}</span>
+            </span>
+          {% endif %}
+        </li>
+        <li class="sp-pager-next{% unless nextLink %} disabled{% endunless %}">
+          {% if nextLink %}
+            <a href="{{ nextLink.url }}{{ request.query }}" rel="next">
+              <span>{{ snippets['SP/NAV/NEXT'] | default: 'Next' }}</span>
+              <i class="fas fa-chevron-right" aria-hidden="true"></i>
+            </a>
+          {% else %}
+            <span class="disabled-link">
+              <span>{{ snippets['SP/NAV/NEXT'] | default: 'Next' }}</span>
+              <i class="fas fa-chevron-right" aria-hidden="true"></i>
+            </span>
+          {% endif %}
+        </li>
+      </ul>
+    </nav>
+  {% endif %}
 {% endif %}
+
+<style>
+/* Pagination Navigation Styles */
+.sp-pagination-nav {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.sp-pager {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sp-pager li a,
+.sp-pager li .disabled-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.sp-pager li a {
+  background-color: var(--sp-primary);
+  color: var(--sp-white);
+}
+
+.sp-pager li a:hover {
+  background-color: var(--sp-primary-dark);
+  color: var(--sp-white);
+  text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.sp-pager li.disabled .disabled-link {
+  background-color: #e9ecef;
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 575.98px) {
+  .sp-pager {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .sp-pager li {
+    width: 100%;
+  }
+  
+  .sp-pager li a,
+  .sp-pager li .disabled-link {
+    width: 100%;
+    justify-content: center;
+  }
+}
+</style>

@@ -1,0 +1,312 @@
+{% comment %}
+  Stylish Portfolio Theme - Home Page Template
+  Based on Start Bootstrap Stylish Portfolio v6.0.6
+  Adapted for Power Pages by CloudStrucc
+  
+  This replaces CS-Home-WET.liquid
+{% endcomment %}
+
+{% if user %}
+{%- comment -%} ========================================
+   AUTHENTICATED USER - DASHBOARD VIEW
+   ======================================== {%- endcomment -%}
+
+<main id="sp-main" class="sp-main-content">
+  <div class="container py-4">
+    
+    <!-- Welcome Section -->
+    <section class="mb-5">
+      <h1 class="mb-3">{{ snippets['SP/DASHBOARD/WELCOME'] | default: 'Welcome back' }}, {{ user.firstname }}!</h1>
+      <p class="lead text-muted">{{ snippets['SP/DASHBOARD/SUBTITLE'] | default: 'Here\'s an overview of your account.' }}</p>
+    </section>
+
+    <!-- Quick Actions / Services Cards -->
+    <section class="mb-5">
+      <h2 class="mb-4">{{ snippets['SP/SERVICES/TITLE'] | default: 'Quick Actions' }}</h2>
+      <div class="row">
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+          <a href="{{ sitemarkers['ServiceCard1'].url | default: '#' }}" style="text-decoration: none; color: inherit;">
+            <div class="sp-dashboard-card sp-icon-card">
+              <div class="sp-icon">
+                <i class="{{ snippets['SP/CARD1/ICON'] | default: 'icon-screen-smartphone' }}"></i>
+              </div>
+              <h4>{{ snippets['SP/CARD1/TITLE'] | default: 'New Request' }}</h4>
+              <p>{{ snippets['SP/CARD1/DESC'] | default: 'Submit a new request or application' }}</p>
+            </div>
+          </a>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+          <a href="{{ sitemarkers['ServiceCard2'].url | default: '#' }}" style="text-decoration: none; color: inherit;">
+            <div class="sp-dashboard-card sp-icon-card">
+              <div class="sp-icon">
+                <i class="{{ snippets['SP/CARD2/ICON'] | default: 'icon-pencil' }}"></i>
+              </div>
+              <h4>{{ snippets['SP/CARD2/TITLE'] | default: 'My Submissions' }}</h4>
+              <p>{{ snippets['SP/CARD2/DESC'] | default: 'View and manage your submissions' }}</p>
+            </div>
+          </a>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+          <a href="{{ sitemarkers['ServiceCard3'].url | default: '#' }}" style="text-decoration: none; color: inherit;">
+            <div class="sp-dashboard-card sp-icon-card">
+              <div class="sp-icon">
+                <i class="{{ snippets['SP/CARD3/ICON'] | default: 'icon-like' }}"></i>
+              </div>
+              <h4>{{ snippets['SP/CARD3/TITLE'] | default: 'My Profile' }}</h4>
+              <p>{{ snippets['SP/CARD3/DESC'] | default: 'Update your profile information' }}</p>
+            </div>
+          </a>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+          <a href="{{ sitemarkers['ServiceCard4'].url | default: '#' }}" style="text-decoration: none; color: inherit;">
+            <div class="sp-dashboard-card sp-icon-card">
+              <div class="sp-icon">
+                <i class="{{ snippets['SP/CARD4/ICON'] | default: 'icon-support' }}"></i>
+              </div>
+              <h4>{{ snippets['SP/CARD4/TITLE'] | default: 'Support' }}</h4>
+              <p>{{ snippets['SP/CARD4/DESC'] | default: 'Get help and resources' }}</p>
+            </div>
+          </a>
+        </div>
+        
+      </div>
+    </section>
+
+    <!-- Two Column Section: Recent Activity & Quick Links -->
+    <section class="row">
+      <div class="col-lg-8 mb-4">
+        <div class="sp-dashboard-card">
+          <h3>{{ snippets['SP/ACTIVITY/TITLE'] | default: 'Recent Activity' }}</h3>
+          {% assign activities = entities['sp_activities'] | where: 'sp_contactid', user.id | order_by: 'createdon', 'desc' | take: 5 %}
+          {% if activities.size > 0 %}
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              {% for activity in activities %}
+              <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+                <div class="d-flex" style="justify-content: space-between; align-items: center;">
+                  <div>
+                    <span style="color: var(--sp-primary); margin-right: 10px;">
+                      <i class="fas fa-circle" style="font-size: 0.5rem;"></i>
+                    </span>
+                    {{ activity.sp_description }}
+                  </div>
+                  <span class="text-muted small">{{ activity.createdon | date: "%b %d, %Y" }}</span>
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted"><em>No recent activity to display.</em></p>
+          {% endif %}
+        </div>
+      </div>
+      
+      <div class="col-lg-4 mb-4">
+        <div class="sp-dashboard-card">
+          <h3>{{ snippets['SP/QUICKLINKS/TITLE'] | default: 'Quick Links' }}</h3>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            {% assign quick_links = weblinks["Quick Links"] %}
+            {% if quick_links %}
+              {% for link in quick_links.weblinks %}
+                <li style="padding: 8px 0;">
+                  <a href="{{ link.url | h }}">
+                    <i class="fas fa-angle-right" style="margin-right: 8px; color: var(--sp-primary);"></i>
+                    {{ link.name | h }}
+                  </a>
+                </li>
+              {% endfor %}
+            {% else %}
+              <li style="padding: 8px 0;"><a href="{{ sitemarkers['QuickLink1'].url }}"><i class="fas fa-angle-right" style="margin-right: 8px; color: var(--sp-primary);"></i>{{ snippets['SP/QUICKLINK1'] | default: 'Documentation' }}</a></li>
+              <li style="padding: 8px 0;"><a href="{{ sitemarkers['QuickLink2'].url }}"><i class="fas fa-angle-right" style="margin-right: 8px; color: var(--sp-primary);"></i>{{ snippets['SP/QUICKLINK2'] | default: 'FAQs' }}</a></li>
+              <li style="padding: 8px 0;"><a href="{{ sitemarkers['QuickLink3'].url }}"><i class="fas fa-angle-right" style="margin-right: 8px; color: var(--sp-primary);"></i>{{ snippets['SP/QUICKLINK3'] | default: 'Contact Support' }}</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+{% else %}
+{%- comment -%} ========================================
+   ANONYMOUS USER - LANDING PAGE VIEW
+   ======================================== {%- endcomment -%}
+
+<main id="sp-main">
+
+  <!-- Masthead / Hero Section -->
+  <header id="page-top" class="masthead d-flex align-items-center">
+    <div class="container px-4 px-lg-5 text-center">
+      <h1 class="mb-1">{{ snippets['SP/HERO/TITLE'] | default: 'Stylish Portfolio' }}</h1>
+      <h3 class="mb-5"><em>{{ snippets['SP/HERO/SUBTITLE'] | default: 'A Modern Power Pages Theme' }}</em></h3>
+      <a class="btn btn-primary btn-xl" href="#about">{{ snippets['SP/HERO/CTA'] | default: 'Find Out More' }}</a>
+    </div>
+  </header>
+
+  <!-- About Section -->
+  <section class="content-section bg-light" id="about">
+    <div class="container px-4 px-lg-5 text-center">
+      <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-lg-10">
+          <h2>{{ snippets['SP/ABOUT/TITLE'] | default: 'Welcome to our platform!' }}</h2>
+          <p class="lead mb-5">
+            {{ snippets['SP/ABOUT/DESC'] | default: 'This theme features a modern, responsive design perfect for showcasing your services and engaging with your users.' }}
+          </p>
+          <a class="btn btn-dark btn-xl" href="#services">{{ snippets['SP/ABOUT/CTA'] | default: 'What We Offer' }}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="content-section bg-primary text-white text-center" id="services">
+    <div class="container px-4 px-lg-5">
+      <div class="content-section-heading">
+        <h3 class="text-secondary mb-0">{{ snippets['SP/SERVICES/LABEL'] | default: 'Services' }}</h3>
+        <h2 class="mb-5">{{ snippets['SP/SERVICES/TITLE'] | default: 'What We Offer' }}</h2>
+      </div>
+      <div class="row gx-4 gx-lg-5">
+        
+        <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+          <span class="service-icon rounded-circle mx-auto mb-3"><i class="{{ snippets['SP/SERVICE1/ICON'] | default: 'icon-screen-smartphone' }}"></i></span>
+          <h4><strong>{{ snippets['SP/SERVICE1/TITLE'] | default: 'Responsive' }}</strong></h4>
+          <p class="text-faded mb-0">{{ snippets['SP/SERVICE1/DESC'] | default: 'Looks great on any screen size!' }}</p>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+          <span class="service-icon rounded-circle mx-auto mb-3"><i class="{{ snippets['SP/SERVICE2/ICON'] | default: 'icon-pencil' }}"></i></span>
+          <h4><strong>{{ snippets['SP/SERVICE2/TITLE'] | default: 'Modern Design' }}</strong></h4>
+          <p class="text-faded mb-0">{{ snippets['SP/SERVICE2/DESC'] | default: 'Clean and professional styling.' }}</p>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
+          <span class="service-icon rounded-circle mx-auto mb-3"><i class="{{ snippets['SP/SERVICE3/ICON'] | default: 'icon-like' }}"></i></span>
+          <h4><strong>{{ snippets['SP/SERVICE3/TITLE'] | default: 'User Friendly' }}</strong></h4>
+          <p class="text-faded mb-0">{{ snippets['SP/SERVICE3/DESC'] | default: 'Intuitive navigation and layout.' }}</p>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+          <span class="service-icon rounded-circle mx-auto mb-3"><i class="{{ snippets['SP/SERVICE4/ICON'] | default: 'icon-lock' }}"></i></span>
+          <h4><strong>{{ snippets['SP/SERVICE4/TITLE'] | default: 'Secure' }}</strong></h4>
+          <p class="text-faded mb-0">{{ snippets['SP/SERVICE4/DESC'] | default: 'Built with security in mind.' }}</p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- Callout Section -->
+  <section class="callout">
+    <div class="container px-4 px-lg-5 text-center">
+      <h2 class="mx-auto mb-5">
+        {{ snippets['SP/CALLOUT/TEXT'] | default: 'Ready to get started?' }}
+      </h2>
+      <a class="btn btn-primary btn-xl" href="/Account/Login">{{ snippets['SP/CALLOUT/CTA'] | default: 'Get Started Now!' }}</a>
+    </div>
+  </section>
+
+  <!-- Portfolio Section -->
+  <section class="content-section" id="portfolio">
+    <div class="container px-4 px-lg-5">
+      <div class="content-section-heading text-center">
+        <h3 class="text-secondary mb-0">{{ snippets['SP/PORTFOLIO/LABEL'] | default: 'Portfolio' }}</h3>
+        <h2 class="mb-5">{{ snippets['SP/PORTFOLIO/TITLE'] | default: 'Recent Projects' }}</h2>
+      </div>
+      <div class="row gx-0">
+        
+        <div class="col-lg-6">
+          <a class="portfolio-item" href="{{ sitemarkers['Portfolio1'].url | default: '#!' }}">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h2">{{ snippets['SP/PORTFOLIO1/TITLE'] | default: 'Project One' }}</div>
+                <p class="mb-0">{{ snippets['SP/PORTFOLIO1/DESC'] | default: 'A brief description of this amazing project.' }}</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{{ snippets['SP/PORTFOLIO1/IMG'] | default: '/sp-portfolio-1.jpg' }}" alt="{{ snippets['SP/PORTFOLIO1/TITLE'] | default: 'Project One' }}" />
+          </a>
+        </div>
+        
+        <div class="col-lg-6">
+          <a class="portfolio-item" href="{{ sitemarkers['Portfolio2'].url | default: '#!' }}">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h2">{{ snippets['SP/PORTFOLIO2/TITLE'] | default: 'Project Two' }}</div>
+                <p class="mb-0">{{ snippets['SP/PORTFOLIO2/DESC'] | default: 'Another great project showcase.' }}</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{{ snippets['SP/PORTFOLIO2/IMG'] | default: '/sp-portfolio-2.jpg' }}" alt="{{ snippets['SP/PORTFOLIO2/TITLE'] | default: 'Project Two' }}" />
+          </a>
+        </div>
+        
+        <div class="col-lg-6">
+          <a class="portfolio-item" href="{{ sitemarkers['Portfolio3'].url | default: '#!' }}">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h2">{{ snippets['SP/PORTFOLIO3/TITLE'] | default: 'Project Three' }}</div>
+                <p class="mb-0">{{ snippets['SP/PORTFOLIO3/DESC'] | default: 'Showcasing our capabilities.' }}</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{{ snippets['SP/PORTFOLIO3/IMG'] | default: '/sp-portfolio-3.jpg' }}" alt="{{ snippets['SP/PORTFOLIO3/TITLE'] | default: 'Project Three' }}" />
+          </a>
+        </div>
+        
+        <div class="col-lg-6">
+          <a class="portfolio-item" href="{{ sitemarkers['Portfolio4'].url | default: '#!' }}">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h2">{{ snippets['SP/PORTFOLIO4/TITLE'] | default: 'Project Four' }}</div>
+                <p class="mb-0">{{ snippets['SP/PORTFOLIO4/DESC'] | default: 'Our latest and greatest work.' }}</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{{ snippets['SP/PORTFOLIO4/IMG'] | default: '/sp-portfolio-4.jpg' }}" alt="{{ snippets['SP/PORTFOLIO4/TITLE'] | default: 'Project Four' }}" />
+          </a>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action Section -->
+  <section class="content-section bg-primary text-white">
+    <div class="container px-4 px-lg-5 text-center">
+      <h2 class="mb-4">{{ snippets['SP/CTA/TITLE'] | default: 'Ready to take the next step?' }}</h2>
+      <a class="btn btn-xl btn-light me-4" href="/Account/Login">{{ snippets['SP/CTA/BTN1'] | default: 'Sign In' }}</a>
+      <a class="btn btn-xl btn-dark" href="#contact">{{ snippets['SP/CTA/BTN2'] | default: 'Contact Us' }}</a>
+    </div>
+  </section>
+
+  <!-- Map / Contact Section -->
+  {% if snippets['SP/MAP/ENABLED'] == 'true' %}
+  <div class="map" id="contact">
+    <iframe src="{{ snippets['SP/MAP/EMBED'] | default: 'https://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=Ottawa,+Ontario,+Canada&t=m&z=12&output=embed' }}"></iframe>
+  </div>
+  {% else %}
+  <section class="content-section bg-light" id="contact">
+    <div class="container px-4 px-lg-5 text-center">
+      <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-lg-10">
+          <h2>{{ snippets['SP/CONTACT/TITLE'] | default: 'Get In Touch' }}</h2>
+          <p class="lead mb-5">
+            {{ snippets['SP/CONTACT/DESC'] | default: 'Have questions? We\'d love to hear from you. Send us a message and we\'ll respond as soon as possible.' }}
+          </p>
+          <p class="mb-3">
+            <i class="fas fa-envelope" style="margin-right: 10px; color: var(--sp-primary);"></i>
+            <a href="mailto:{{ snippets['SP/CONTACT/EMAIL'] | default: 'contact@example.com' }}">{{ snippets['SP/CONTACT/EMAIL'] | default: 'contact@example.com' }}</a>
+          </p>
+          <p class="mb-3">
+            <i class="fas fa-phone" style="margin-right: 10px; color: var(--sp-primary);"></i>
+            {{ snippets['SP/CONTACT/PHONE'] | default: '1-800-XXX-XXXX' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+</main>
+
+{% endif %}

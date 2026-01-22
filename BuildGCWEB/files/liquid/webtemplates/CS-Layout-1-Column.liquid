@@ -1,34 +1,43 @@
-<div class="wrapper-body">
-  <div class="container" role="main">
-    <div class="page-heading">
+{% comment %}
+  Stylish Portfolio Theme - 1 Column Layout Template
+  Based on Start Bootstrap Stylish Portfolio v6.0.6
+  Adapted for Power Pages by CloudStrucc
+{% endcomment %}
+
+<main id="sp-main" class="sp-main-content">
+  <div class="container py-4">
+    
+    <div class="page-heading mb-4">
       {% block breadcrumbs %}
-        {% comment %} {% include 'Breadcrumbs' %} {% endcomment %}
-        {% include 'ECNavBreadcrumbs' %}
+        {% include 'Breadcrumbs' %}
       {% endblock %}
+      
       {% block title %}
         {% include 'Page Title' %}
       {% endblock %}
     </div>
-  <div class="row">
-    <div class="col-md-12">
-      <div id="mainContent">
-      {% block main %}
-      {% include 'Page Copy' %}
-     
-      {% if page.adx_entitylist %}
-            {% include 'entity_list' key:page.adx_entitylist.id %}
-          {% endif %}
-         
-          {% if page.adx_entityform %}
-            {% entityform id: page.adx_entityform.id %}
-          {% endif %}
-         
-          {% if page.adx_webform %}
-            {% webform id: page.adx_webform.id %}
-          {% endif %}
-    {% endblock %}
+    
+    <div class="row">
+      <div class="col-12">
+        <div id="mainContent" class="sp-dashboard-card">
+          {% block main %}
+            {% include 'Page Copy' %}
+            
+            {% if page.adx_entitylist %}
+              {% include 'entity_list' key: page.adx_entitylist.id %}
+            {% endif %}
+            
+            {% if page.adx_entityform %}
+              {% entityform id: page.adx_entityform.id %}
+            {% endif %}
+            
+            {% if page.adx_webform %}
+              {% webform id: page.adx_webform.id %}
+            {% endif %}
+          {% endblock %}
+        </div>
+      </div>
     </div>
-    </div>
+    
   </div>
-  </div>
-</div>
+</main>
