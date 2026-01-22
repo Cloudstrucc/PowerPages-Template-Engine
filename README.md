@@ -1,805 +1,413 @@
-# Power Pages Template Engine
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# Deployment Guide: Stylish Portfolio Theme for Power Pages
 
-A comprehensive deployment toolkit for applying custom templates, themes, and GCWeb (Government of Canada Web Experience Toolkit) compliance to Microsoft Power Pages sites. This engine automates the deployment of Bootstrap 3/4/5 compatible themes to Power Pages sites using the **Enhanced Data Model**.
-
-## Table of Contents
-
-- [Power Pages Template Engine](#power-pages-template-engine)
-  - [Table of Contents](#table-of-contents)
-  - [Overview](#overview)
-  - [Features](#features)
-  - [Architecture](#architecture)
-  - [Prerequisites](#prerequisites)
-    - [Software Requirements](#software-requirements)
-    - [Install Dependencies (macOS)](#install-dependencies-macos)
-    - [Install Dependencies (Ubuntu/Debian)](#install-dependencies-ubuntudebian)
-    - [Microsoft Requirements](#microsoft-requirements)
-  - [Power Pages Licensing](#power-pages-licensing)
-    - [Trial Options](#trial-options)
-    - [Production Licensing](#production-licensing)
-    - [Developer Environments](#developer-environments)
-  - [Environment Setup](#environment-setup)
-    - [Creating a Power Pages Site](#creating-a-power-pages-site)
-    - [Enabling the Enhanced Data Model](#enabling-the-enhanced-data-model)
-    - [Azure App Registration](#azure-app-registration)
-    - [Installing the File Upload Solution](#installing-the-file-upload-solution)
-  - [Configuration](#configuration)
-    - [Connection JSON File](#connection-json-file)
-    - [Finding Your Website ID](#finding-your-website-id)
-    - [Configuration Variables](#configuration-variables)
-  - [Installation](#installation)
-    - [Clone the Repository](#clone-the-repository)
-    - [Install Dependencies](#install-dependencies)
-    - [Prepare Theme Files](#prepare-theme-files)
-  - [Usage](#usage)
-    - [Running the Deployment Script](#running-the-deployment-script)
-    - [Script Workflow](#script-workflow)
-  - [Project Structure](#project-structure)
-    - [BuildGCWEB Folder](#buildgcweb-folder)
-    - [Libraries Folder](#libraries-folder)
-    - [Web Templates](#web-templates)
-    - [Wizard Components](#wizard-components)
-  - [GCWeb Theme Integration](#gcweb-theme-integration)
-    - [About GCWeb and WET-BOEW](#about-gcweb-and-wet-boew)
-    - [WCAG Accessibility Compliance](#wcag-accessibility-compliance)
-    - [Bilingual Support](#bilingual-support)
-  - [Post-Deployment Configuration](#post-deployment-configuration)
-    - [Syncing Your Site](#syncing-your-site)
-    - [Identity Provider Setup](#identity-provider-setup)
-    - [Azure AD B2C Configuration](#azure-ad-b2c-configuration)
-      - [Step 1: Create Azure AD B2C Tenant](#step-1-create-azure-ad-b2c-tenant)
-      - [Step 2: Register Power Pages Application](#step-2-register-power-pages-application)
-      - [Step 3: Create User Flows](#step-3-create-user-flows)
-      - [Step 4: Configure Power Pages](#step-4-configure-power-pages)
-    - [Web Roles and Permissions](#web-roles-and-permissions)
-  - [Content Snippets](#content-snippets)
-  - [Troubleshooting](#troubleshooting)
-    - [Common Issues](#common-issues)
-      - [Token Acquisition Failed](#token-acquisition-failed)
-      - [Website ID Not Found](#website-id-not-found)
-      - [French Language Not Found](#french-language-not-found)
-      - [Permission Denied](#permission-denied)
-    - [Debug Mode](#debug-mode)
-    - [Verify API Connectivity](#verify-api-connectivity)
-  - [Contributing](#contributing)
-    - [Development Guidelines](#development-guidelines)
-  - [License](#license)
-  - [Acknowledgments](#acknowledgments)
-  - [Resources](#resources)
-    - [Official Documentation](#official-documentation)
-    - [Related Projects](#related-projects)
-
----
-
-## Overview
-
-The Power Pages Template Engine streamlines the deployment of custom themes to Microsoft Power Pages sites. It is specifically designed for:
-
-- **Government of Canada (GoC) departments** requiring GCWeb/WET-BOEW compliance
-- **Organizations** needing WCAG 2.0/2.1 Level AA accessible websites
-- **Developers** deploying custom Bootstrap themes to Power Pages
-- **Enterprise teams** requiring bilingual (English/French) support
-
-The engine uses the Dataverse Web API to programmatically create and update:
-
-- Web Templates (Liquid templates for headers, footers, layouts)
-- Web Pages (site hierarchy and navigation)
-- Web Files (CSS, JavaScript, images, fonts)
-- Content Snippets (reusable multilingual content blocks)
-- Page Templates (template configurations)
-
----
-
-## Features
-
-- ✅ **Automated Deployment**: Single script deploys entire theme structure
-- ✅ **Enhanced Data Model Support**: Built for Power Pages' modern data architecture
-- ✅ **GCWeb Integration**: Full support for Government of Canada Web Experience Toolkit
-- ✅ **Bilingual Support**: English and French content snippet management
-- ✅ **WCAG Compliance**: Designed for accessibility standards compliance
-- ✅ **Theme Flexibility**: Support for Bootstrap 3, 4, and 5 themes
-- ✅ **Wizard Components**: Multi-step form wizard templates included
-- ✅ **Idempotent Operations**: Safe to run multiple times (creates or updates)
-- ✅ **File Upload via Power Automate**: Optional cloud flow for file handling
-
----
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    Power Pages Template Engine                   │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                   │
-│  ┌─────────────┐    ┌─────────────┐    ┌─────────────────────┐   │
-│  │   Theme     │    │  Deployment │    │     Dataverse       │   │
-│  │   Files     │───▶│   Script    │───▶│     Web API         │   │
-│  │  (ZIP)      │    │  (Bash)     │    │   (OAuth 2.0)       │   │
-│  └─────────────┘    └─────────────┘    └─────────────────────┘   │
-│                            │                      │               │
-│                            ▼                      ▼               │
-│  ┌─────────────┐    ┌─────────────┐    ┌─────────────────────┐   │
-│  │   Liquid    │    │   Content   │    │    Power Pages      │   │
-│  │  Templates  │    │  Snippets   │    │      Website        │   │
-│  └─────────────┘    └─────────────┘    └─────────────────────┘   │
-│                                                                   │
-└─────────────────────────────────────────────────────────────────┘
-```
-
----
+This guide walks you through deploying the Stylish Portfolio theme using the PowerPages-Template-Engine.
 
 ## Prerequisites
 
-### Software Requirements
+Ensure you have completed the prerequisites from the main repository:
 
-| Software | Version | Purpose |
-|----------|---------|---------|
-| **macOS/Linux** | Any | Script execution environment |
-| **curl** | Latest | HTTP requests to Dataverse API |
-| **jq** | Latest | JSON parsing and manipulation |
-| **python3** | 3.x | URL encoding and path manipulation |
-| **unzip** | Latest | Theme package extraction |
+* Power Pages site created with **Enhanced Data Model**
+* Azure App Registration configured
+* `connection.json` file ready
+* Dependencies installed (`jq`, `curl`, `python3`)
 
-### Install Dependencies (macOS)
+---
+
+## Step 1: Create a New Branch
 
 ```bash
-# Install Homebrew if not already installed
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Install required tools
-brew install jq curl python3
+cd PowerPages-Template-Engine
+git checkout -b feature/stylish-portfolio-theme
 ```
 
-### Install Dependencies (Ubuntu/Debian)
+---
+
+## Step 2: Set Up the Folder Structure
+
+Create a new build folder for the Stylish Portfolio theme:
 
 ```bash
-sudo apt update
-sudo apt install jq curl python3 unzip
+mkdir -p BuildStylishPortfolio/files/liquid/webtemplates
+mkdir -p BuildStylishPortfolio/files/liquid/contentsnippets
 ```
 
-### Microsoft Requirements
+---
 
-- **Microsoft 365 tenant** with Power Platform access
-- **Dataverse environment** with Power Pages enabled
-- **Azure subscription** (for App Registration)
-- **Power Platform Admin** or Environment Admin role
-- **French language pack** installed in Dataverse (for bilingual support)
+## Step 3: Copy Template Files
+
+Copy the Stylish Portfolio `.liquid` files to the webtemplates folder:
+
+```bash
+# From the downloaded templates
+cp CS-Styles.liquid BuildStylishPortfolio/files/liquid/webtemplates/
+cp CS-header.liquid BuildStylishPortfolio/files/liquid/webtemplates/
+cp CS-footer.liquid BuildStylishPortfolio/files/liquid/webtemplates/
+cp CS-Home-SP.liquid BuildStylishPortfolio/files/liquid/webtemplates/
+cp CS-Layout-1-Column.liquid BuildStylishPortfolio/files/liquid/webtemplates/
+cp CS-Layout-1-Column-with-Left-Nav.liquid BuildStylishPortfolio/files/liquid/webtemplates/
+cp CS-Wizard-Step.liquid BuildStylishPortfolio/files/liquid/webtemplates/
+cp CS-Wizard-Style.liquid BuildStylishPortfolio/files/liquid/webtemplates/
+cp CS-Weblink-List-Group-Left.liquid BuildStylishPortfolio/files/liquid/webtemplates/
+cp CS-Web-Link-Button.liquid BuildStylishPortfolio/files/liquid/webtemplates/
+cp CS-Validation-Wizard-Step.liquid BuildStylishPortfolio/files/liquid/webtemplates/
+```
 
 ---
 
-## Power Pages Licensing
+## Step 4: Create the Content Snippets JSON
 
-### Trial Options
+Create the `snippets.json` file with all required snippets:
 
-Power Pages offers a **30-day free trial** for exploring features:
-
-1. Visit [powerpages.microsoft.com](https://powerpages.microsoft.com)
-2. Select "Try it for free"
-3. Follow the guided setup process
-
-Trial sites can be converted to production when ready.
-
-### Production Licensing
-
-Power Pages uses capacity-based licensing:
-
-| Plan | Cost | Capacity |
-|------|------|----------|
-| **Authenticated Users** | ~$200/month | 100 users per site |
-| **Anonymous Users** | ~$75/month | 500 users per site |
-
-**Included Entitlements:**
-
-- **Dynamics 365 Enterprise/Premium licenses**: Unlimited Power Pages sites in the same environment
-- **Power Apps Premium**: Unlimited Power Pages sites
-- **Power Apps per app**: Single website use rights
-
-### Developer Environments
-
-For development and testing, use:
-
-- **Power Apps Developer Plan** (free): Individual use environment
-- **Trial environments**: 30-day standard or subscription-based trials
-
----
-
-## Environment Setup
-
-### Creating a Power Pages Site
-
-Before running the deployment script, you must create a blank Power Pages site:
-
-1. Navigate to [make.powerpages.microsoft.com](https://make.powerpages.microsoft.com)
-2. Select your target environment
-3. Click **Create a site**
-4. Choose **Blank page** template (critical for custom themes)
-5. Enter site name and web address
-6. Wait for site provisioning (typically 5-15 minutes)
-
-**Important**: The site must use the **Enhanced Data Model**. New sites default to this model, but verify in the site settings.
-
-### Enabling the Enhanced Data Model
-
-If your environment doesn't have the Enhanced Data Model enabled:
-
-1. Go to [admin.powerplatform.microsoft.com](https://admin.powerplatform.microsoft.com)
-2. Select your environment
-3. Navigate to **Resources** → **Power Pages sites**
-4. Toggle **Switch to enhanced data model** to ON
-5. Wait for the Power Pages Core package to install
-
-**Verify Data Model:**
-
-1. Open Power Platform Admin Center
-2. Go to Resources → Power Pages sites → Select your site → Manage
-3. Check the **Data Model** field in Site Details
-
-### Azure App Registration
-
-Create an Azure App Registration for API authentication:
-
-1. Go to [portal.azure.com](https://portal.azure.com)
-2. Navigate to **Azure Active Directory** → **App registrations**
-3. Click **New registration**
-4. Configure:
-   - **Name**: `PowerPages-Template-Engine` (or your preferred name)
-   - **Supported account types**: Single tenant
-   - **Redirect URI**: `https://login.onmicrosoft.com`
-
-5. After creation, note the:
-   - **Application (client) ID**
-   - **Directory (tenant) ID**
-
-6. Create a client secret:
-   - Go to **Certificates & secrets**
-   - Click **New client secret**
-   - Set description and expiration
-   - **Copy the secret value immediately** (it won't be shown again)
-
-7. Grant API permissions:
-   - Go to **API permissions**
-   - Add **Dynamics CRM** → `user_impersonation`
-   - Grant admin consent
-
-### Installing the File Upload Solution
-
-The template engine uses a Power Automate cloud flow for file uploads:
-
-1. Locate `FILE_UPLOAD_FLOW.zip` in the repository
-2. Import into your Dataverse environment:
-   - Go to [make.powerapps.com](https://make.powerapps.com)
-   - Navigate to **Solutions** → **Import**
-   - Upload and configure the solution
-
-3. After import, open the cloud flow:
-   - Edit the flow
-   - Copy the **HTTP POST URL** from the trigger action
-   - Save this URL for your configuration file
+```bash
+cat > BuildStylishPortfolio/files/liquid/contentsnippets/snippets.json << 'EOF'
+{
+  "SP/SITE/NAME": ["Stylish Portfolio", "Portfolio Élégant"],
+  "SP/APP/TITLE": ["Dashboard", "Tableau de bord"],
+  "SP/ENABLE/LANGUAGE": ["true", "true"],
+  
+  "SP/HERO/TITLE": ["Welcome to Our Portal", "Bienvenue sur notre portail"],
+  "SP/HERO/SUBTITLE": ["A Modern Power Pages Experience", "Une expérience Power Pages moderne"],
+  "SP/HERO/CTA": ["Get Started", "Commencer"],
+  
+  "SP/ABOUT/TITLE": ["About Our Platform", "À propos de notre plateforme"],
+  "SP/ABOUT/DESC": ["Our platform provides a modern, responsive experience for all your needs.", "Notre plateforme offre une expérience moderne et réactive pour tous vos besoins."],
+  "SP/ABOUT/CTA": ["Learn More", "En savoir plus"],
+  
+  "SP/SERVICES/LABEL": ["Services", "Services"],
+  "SP/SERVICES/TITLE": ["What We Offer", "Ce que nous offrons"],
+  
+  "SP/SERVICE1/ICON": ["icon-screen-smartphone", "icon-screen-smartphone"],
+  "SP/SERVICE1/TITLE": ["Responsive Design", "Design réactif"],
+  "SP/SERVICE1/DESC": ["Looks great on any device", "S'affiche parfaitement sur tout appareil"],
+  
+  "SP/SERVICE2/ICON": ["icon-pencil", "icon-pencil"],
+  "SP/SERVICE2/TITLE": ["Modern Interface", "Interface moderne"],
+  "SP/SERVICE2/DESC": ["Clean and professional styling", "Style propre et professionnel"],
+  
+  "SP/SERVICE3/ICON": ["icon-like", "icon-like"],
+  "SP/SERVICE3/TITLE": ["User Friendly", "Convivial"],
+  "SP/SERVICE3/DESC": ["Intuitive navigation", "Navigation intuitive"],
+  
+  "SP/SERVICE4/ICON": ["icon-lock", "icon-lock"],
+  "SP/SERVICE4/TITLE": ["Secure", "Sécurisé"],
+  "SP/SERVICE4/DESC": ["Built with security in mind", "Conçu avec la sécurité à l'esprit"],
+  
+  "SP/CALLOUT/TEXT": ["Ready to get started?", "Prêt à commencer?"],
+  "SP/CALLOUT/CTA": ["Sign Up Now", "Inscrivez-vous maintenant"],
+  
+  "SP/PORTFOLIO/LABEL": ["Portfolio", "Portfolio"],
+  "SP/PORTFOLIO/TITLE": ["Featured Work", "Travaux en vedette"],
+  
+  "SP/PORTFOLIO1/TITLE": ["Project One", "Projet un"],
+  "SP/PORTFOLIO1/DESC": ["A showcase of our capabilities", "Une vitrine de nos capacités"],
+  "SP/PORTFOLIO1/IMG": ["/sp-portfolio-1.jpg", "/sp-portfolio-1.jpg"],
+  
+  "SP/PORTFOLIO2/TITLE": ["Project Two", "Projet deux"],
+  "SP/PORTFOLIO2/DESC": ["Innovation in action", "L'innovation en action"],
+  "SP/PORTFOLIO2/IMG": ["/sp-portfolio-2.jpg", "/sp-portfolio-2.jpg"],
+  
+  "SP/PORTFOLIO3/TITLE": ["Project Three", "Projet trois"],
+  "SP/PORTFOLIO3/DESC": ["Creative solutions", "Solutions créatives"],
+  "SP/PORTFOLIO3/IMG": ["/sp-portfolio-3.jpg", "/sp-portfolio-3.jpg"],
+  
+  "SP/PORTFOLIO4/TITLE": ["Project Four", "Projet quatre"],
+  "SP/PORTFOLIO4/DESC": ["Excellence delivered", "Excellence livrée"],
+  "SP/PORTFOLIO4/IMG": ["/sp-portfolio-4.jpg", "/sp-portfolio-4.jpg"],
+  
+  "SP/CTA/TITLE": ["Take the Next Step", "Passez à l'étape suivante"],
+  "SP/CTA/BTN1": ["Sign In", "Se connecter"],
+  "SP/CTA/BTN2": ["Contact Us", "Contactez-nous"],
+  
+  "SP/MAP/ENABLED": ["false", "false"],
+  "SP/CONTACT/TITLE": ["Get In Touch", "Contactez-nous"],
+  "SP/CONTACT/DESC": ["We'd love to hear from you", "Nous aimerions avoir de vos nouvelles"],
+  "SP/CONTACT/EMAIL": ["contact@example.com", "contact@example.com"],
+  "SP/CONTACT/PHONE": ["1-800-555-0123", "1-800-555-0123"],
+  
+  "SP/FOOTER/COPYRIGHT": ["Your Company", "Votre entreprise"],
+  "SP/FOOTER/LINK1": ["Terms", "Conditions"],
+  "SP/FOOTER/LINK2": ["Privacy", "Confidentialité"],
+  "SP/FOOTER/LINK3": ["Contact", "Contact"],
+  
+  "SP/DASHBOARD/WELCOME": ["Welcome back", "Bienvenue"],
+  "SP/DASHBOARD/SUBTITLE": ["Here's an overview of your account", "Voici un aperçu de votre compte"],
+  
+  "SP/CARD1/ICON": ["icon-screen-smartphone", "icon-screen-smartphone"],
+  "SP/CARD1/TITLE": ["New Request", "Nouvelle demande"],
+  "SP/CARD1/DESC": ["Submit a new request", "Soumettre une nouvelle demande"],
+  
+  "SP/CARD2/ICON": ["icon-pencil", "icon-pencil"],
+  "SP/CARD2/TITLE": ["My Submissions", "Mes soumissions"],
+  "SP/CARD2/DESC": ["View your submissions", "Voir vos soumissions"],
+  
+  "SP/CARD3/ICON": ["icon-like", "icon-like"],
+  "SP/CARD3/TITLE": ["My Profile", "Mon profil"],
+  "SP/CARD3/DESC": ["Update your information", "Mettre à jour vos informations"],
+  
+  "SP/CARD4/ICON": ["icon-support", "icon-support"],
+  "SP/CARD4/TITLE": ["Support", "Soutien"],
+  "SP/CARD4/DESC": ["Get help", "Obtenir de l'aide"],
+  
+  "SP/ACTIVITY/TITLE": ["Recent Activity", "Activité récente"],
+  "SP/QUICKLINKS/TITLE": ["Quick Links", "Liens rapides"],
+  "SP/QUICKLINK1": ["Documentation", "Documentation"],
+  "SP/QUICKLINK2": ["FAQs", "FAQ"],
+  "SP/QUICKLINK3": ["Contact Support", "Contacter le support"],
+  
+  "SP/NAV/MENU": ["Menu", "Menu"],
+  "SP/NAV/PREVIOUS": ["Previous", "Précédent"],
+  "SP/NAV/NEXT": ["Next", "Suivant"]
+}
+EOF
+```
 
 ---
 
-## Configuration
+## Step 5: Download and Prepare Theme Assets
 
-### Connection JSON File
+Download the Stylish Portfolio theme and extract assets:
 
-Create a `connection.json` file with your environment details:
+```bash
+# Download the theme
+curl -L -o stylish-portfolio.zip https://github.com/StartBootstrap/startbootstrap-stylish-portfolio/archive/refs/heads/gh-pages.zip
+
+# Extract
+unzip stylish-portfolio.zip -d BuildStylishPortfolio/
+
+# Copy images to files folder
+cp BuildStylishPortfolio/startbootstrap-stylish-portfolio-gh-pages/assets/img/bg-masthead.jpg BuildStylishPortfolio/files/sp-bg-masthead.jpg
+cp BuildStylishPortfolio/startbootstrap-stylish-portfolio-gh-pages/assets/img/bg-callout.jpg BuildStylishPortfolio/files/sp-bg-callout.jpg
+cp BuildStylishPortfolio/startbootstrap-stylish-portfolio-gh-pages/assets/img/portfolio-1.jpg BuildStylishPortfolio/files/sp-portfolio-1.jpg
+cp BuildStylishPortfolio/startbootstrap-stylish-portfolio-gh-pages/assets/img/portfolio-2.jpg BuildStylishPortfolio/files/sp-portfolio-2.jpg
+cp BuildStylishPortfolio/startbootstrap-stylish-portfolio-gh-pages/assets/img/portfolio-3.jpg BuildStylishPortfolio/files/sp-portfolio-3.jpg
+cp BuildStylishPortfolio/startbootstrap-stylish-portfolio-gh-pages/assets/img/portfolio-4.jpg BuildStylishPortfolio/files/sp-portfolio-4.jpg
+```
+
+---
+
+## Step 6: Create/Update the Deployment Script
+
+Copy and modify the deploy.sh script for Stylish Portfolio. Key changes needed:
+
+```bash
+cp BuildGCWEB/deploy.sh BuildStylishPortfolio/deploy.sh
+chmod +x BuildStylishPortfolio/deploy.sh
+```
+
+Edit `BuildStylishPortfolio/deploy.sh` and update these variables:
+
+```bash
+# Change the home page template name
+PAGE_TEMPLATE_NAME_NEW_HOME="CS-Home-SP"
+
+# Update web template names if needed
+WEB_TEMPLATE_HEADER="CS-header"
+WEB_TEMPLATE_FOOTER="CS-footer"
+WEB_TEMPLATE_STYLES="CS-Styles"
+```
+
+---
+
+## Step 7: Update Your connection.json
+
+Create or update your `connection.json`:
 
 ```json
 {
-  "clientId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-  "tenantId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-  "crmInstance": "yourorg",
+  "clientId": "YOUR-CLIENT-ID",
+  "tenantId": "YOUR-TENANT-ID",
+  "crmInstance": "YOUR-ORG-NAME",
   "redirectUri": "https://login.onmicrosoft.com",
-  "websiteId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-  "blobAddress": "https://yourstorageaccount.blob.core.windows.net/yourcontainer/",
-  "FlowURL": "https://prod-xx.westus.logic.azure.com:443/workflows/...",
-  "clientSecret": "your-client-secret-value",
-  "themeZipPath": "/path/to/your/theme.zip"
+  "websiteId": "YOUR-WEBSITE-GUID",
+  "blobAddress": "https://yourstorage.blob.core.windows.net/container/",
+  "FlowURL": "YOUR-POWER-AUTOMATE-FLOW-URL",
+  "clientSecret": "YOUR-CLIENT-SECRET",
+  "themeZipPath": "/path/to/stylish-portfolio.zip"
 }
 ```
 
-**Configuration Parameters:**
-
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `clientId` | Azure App Registration Client ID | `a1b2c3d4-...` |
-| `tenantId` | Azure AD Tenant ID | `e5f6g7h8-...` |
-| `crmInstance` | Dataverse environment name | `contoso` (from `contoso.crm.dynamics.com`) |
-| `redirectUri` | OAuth redirect URI | `https://login.onmicrosoft.com` |
-| `websiteId` | Power Pages Website GUID | Found in Power Pages Management app |
-| `blobAddress` | Azure Blob Storage URL (optional) | `https://storage.blob.core.windows.net/` |
-| `FlowURL` | Power Automate trigger URL | From the imported cloud flow |
-| `clientSecret` | Azure App client secret | Your generated secret |
-| `themeZipPath` | Path to theme ZIP file | `/Users/you/themes/gcweb.zip` |
-
-### Finding Your Website ID
-
-1. Open Power Pages Management app (Model-driven app)
-2. Navigate to **Websites**
-3. Open your website record
-4. Copy the **Website ID** (GUID) from the URL or form
-
-### Configuration Variables
-
-The deployment script contains additional variables you may need to modify:
-
-```bash
-# Language codes (Dataverse LCID values)
-ENGLISH_LANGUAGE_CODE=1033
-FRENCH_LANGUAGE_CODE=1036
-
-# Template names
-PAGE_TEMPLATE_NAME_NEW_HOME="CS-Home-WET"
-WEB_TEMPLATE_HEADER="CS-header"
-WEB_TEMPLATE_FOOTER="CS-footer"
-```
-
 ---
 
-## Installation
-
-### Clone the Repository
+## Step 8: Run the Deployment
 
 ```bash
-git clone https://github.com/Cloudstrucc/PowerPages-Template-Engine.git
-cd PowerPages-Template-Engine
-```
-
-### Install Dependencies
-
-```bash
-# macOS
-brew install jq curl python3
-
-# Verify installations
-jq --version
-curl --version
-python3 --version
-```
-
-### Prepare Theme Files
-
-1. Download GCWeb theme from [GCWeb Releases](https://github.com/wet-boew/GCWeb/releases)
-2. Place the ZIP file in a known location
-3. Update `themeZipPath` in your configuration
-
----
-
-## Usage
-
-### Running the Deployment Script
-
-```bash
-cd BuildGCWEB
-chmod +x deploy.sh
+cd BuildStylishPortfolio
 ./deploy.sh
 ```
 
 When prompted:
 
-1. Enter `Y` to provide a JSON configuration file
-2. Enter the full path to your `connection.json`
-3. The script will authenticate and begin deployment
-
-**Interactive Mode:**
-
-If you prefer not to use a JSON file, enter `N` and provide values interactively.
-
-### Script Workflow
-
-The deployment script executes these steps in order:
-
-1. **Extract Theme Files**: Unzips the theme package
-2. **Create Snippets**: Deploys bilingual content snippets (EN/FR)
-3. **Create File Snippets**: Processes JS/CSS/HTML files as snippets
-4. **Write Templates**: Creates/updates Liquid web templates
-5. **Update Home Page**: Configures the home page template
-6. **Write Hierarchy**: Creates web pages and web files from folder structure
-7. **Update Baseline Styles**: Deploys required Power Pages CSS files
-
-```
-================================================
-Power Pages Deployment Script
-================================================
-
-Acquiring authentication token...
-Token acquired successfully
-Retrieving configuration IDs...
-Starting portal template installation...
-Extracting theme files...
-Creating snippets...
-Writing templates...
-Updating home page...
-Writing hierarchy...
-Updating baseline styles...
-Portal template installation complete!
-
-================================================
-Deployment completed successfully!
-Please go to Power Pages site and press Sync
-================================================
-```
+1. Enter `Y` to use JSON configuration
+2. Provide the path to your `connection.json`
 
 ---
 
-## Project Structure
+## Step 9: Post-Deployment Steps
 
-### BuildGCWEB Folder
-
-```
-BuildGCWEB/
-├── deploy.sh                 # Main deployment script
-├── files/
-│   ├── liquid/
-│   │   ├── contentsnippets/
-│   │   │   └── snippets.json    # Bilingual snippet definitions
-│   │   └── webtemplates/        # Liquid template files
-│   │       ├── CS-header.liquid
-│   │       ├── CS-footer.liquid
-│   │       ├── CS-Home-WET.liquid
-│   │       ├── wizard-*.liquid   # Multi-step form wizard templates
-│   │       └── ...
-│   ├── bootstrap.min.css        # Bootstrap CSS
-│   ├── custom-styles.css        # Custom styling
-│   ├── portalbasictheme.css     # Power Pages base theme
-│   ├── theme.css                # GCWeb theme CSS
-│   ├── favicon.ico              # Site favicon
-│   ├── logo-bw-contrast.png     # Logo variants
-│   ├── logo-invert.png
-│   └── landscape.png
-└── startbootstrap-*/            # Extracted theme folder
-```
-
-### Libraries Folder
-
-Contains reusable JavaScript libraries and utilities:
-
-```
-Libraries/
-├── js/
-│   ├── wet-boew.min.js         # WET-BOEW core JavaScript
-│   ├── gcweb.min.js            # GCWeb theme JavaScript
-│   └── custom/                  # Custom scripts
-└── css/
-    └── overrides/               # CSS override files
-```
-
-### Web Templates
-
-Key Liquid templates included:
-
-| Template | Purpose |
-|----------|---------|
-| `CS-header.liquid` | Site header with GCWeb navigation |
-| `CS-footer.liquid` | Site footer with required links |
-| `CS-Home-WET.liquid` | Home page layout |
-| `wizard-container.liquid` | Multi-step form wizard container |
-| `wizard-step.liquid` | Individual wizard step template |
-| `wizard-navigation.liquid` | Wizard progress indicator |
-
-### Wizard Components
-
-The template engine includes a multi-step form wizard system for complex data entry:
-
-**Wizard Features:**
-
-- Step-by-step navigation
-- Progress indication
-- Validation per step
-- Session state management
-- Accessible keyboard navigation
-- Responsive design
-
-**Wizard Templates:**
-
-```liquid
-{% include 'wizard-container' steps: 5, form_id: 'application-form' %}
-  {% include 'wizard-step' number: 1, title: 'Personal Information' %}
-    <!-- Step 1 content -->
-  {% endwizardstep %}
-  
-  {% include 'wizard-step' number: 2, title: 'Contact Details' %}
-    <!-- Step 2 content -->
-  {% endwizardstep %}
-{% endwizardcontainer %}
-```
-
----
-
-## GCWeb Theme Integration
-
-### About GCWeb and WET-BOEW
-
-**GCWeb** is the official theme for Canada.ca, built on the **Web Experience Toolkit (WET-BOEW)**:
-
-- **Official Canada.ca appearance**: Mandatory for Government of Canada websites
-- **Accessibility built-in**: WCAG 2.0/2.1 Level AA compliant
-- **Bilingual support**: Full English/French language switching
-- **Responsive design**: Works across all devices
-- **Standardized components**: Consistent UI patterns
-
-**WET-BOEW provides:**
-
-- Accessible components (menus, forms, tables)
-- Progressive enhancement
-- Print-friendly layouts
-- Multimedia accessibility features
-
-### WCAG Accessibility Compliance
-
-The template engine is designed for WCAG 2.0/2.1 Level AA compliance:
-
-| Criterion | Implementation |
-|-----------|----------------|
-| **1.1 Text Alternatives** | Alt text on all images |
-| **1.3 Adaptable** | Semantic HTML structure |
-| **1.4 Distinguishable** | Color contrast, text resizing |
-| **2.1 Keyboard Accessible** | Full keyboard navigation |
-| **2.4 Navigable** | Skip links, focus indicators |
-| **3.1 Readable** | Language attributes |
-| **4.1 Compatible** | Valid HTML, ARIA labels |
-
-### Bilingual Support
-
-Content snippets support English and French:
-
-```json
-{
-  "site-title": [
-    "Government of Canada Portal",
-    "Portail du gouvernement du Canada"
-  ],
-  "footer-terms": [
-    "Terms and Conditions",
-    "Avis"
-  ]
-}
-```
-
-**Language Switching:**
-
-The templates include automatic language toggle functionality following GCWeb standards.
-
----
-
-## Post-Deployment Configuration
-
-### Syncing Your Site
-
-After deployment completes:
+### 9.1 Sync Your Site
 
 1. Go to [make.powerpages.microsoft.com](https://make.powerpages.microsoft.com)
-2. Open your site in the design studio
-3. Click **Sync** to refresh site components
-4. Preview changes in the studio
+2. Open your site
+3. Click **Sync** to refresh
 
-### Identity Provider Setup
+### 9.2 Upload Images via Portal Management
 
-Power Pages supports multiple authentication providers. For production sites, configure external authentication:
+Upload the theme images to your Power Pages site:
 
-**Supported Providers:**
+1. Open **Portal Management** app in Power Apps
+2. Navigate to **Web Files**
+3. Create new web files for each image:
+   * `sp-bg-masthead.jpg`
+   * `sp-bg-callout.jpg`
+   * `sp-portfolio-1.jpg` through `sp-portfolio-4.jpg`
+   * `sp-logo.png`
+   * `sp-logo-white.png`
 
-- Azure AD B2C (recommended for external users)
-- Microsoft Entra External ID (preview)
-- OKTA
-- Other OIDC/SAML 2.0 providers
+### 9.3 Create Web Link Sets
 
-### Azure AD B2C Configuration
+Create these Web Link Sets in Portal Management:
 
-Azure AD B2C is recommended for external user authentication:
+**Primary Navigation** (for sidebar menu):
 
-#### Step 1: Create Azure AD B2C Tenant
+| Name      | URL        |
+| --------- | ---------- |
+| Home      | /          |
+| About     | #about     |
+| Services  | #services  |
+| Portfolio | #portfolio |
+| Contact   | #contact   |
 
-1. Go to [portal.azure.com](https://portal.azure.com)
-2. Search for "Azure AD B2C"
-3. Create a new Azure AD B2C tenant
+**Profile Navigation** (for authenticated user dropdown):
 
-#### Step 2: Register Power Pages Application
+| Name           | URL          |
+| -------------- | ------------ |
+| My Profile     | /profile     |
+| My Submissions | /submissions |
+| Settings       | /settings    |
 
-1. In your B2C tenant, go to **App registrations**
-2. Create **New registration**
-3. Configure:
-   - **Name**: `PowerPages-Auth`
-   - **Redirect URI**: `https://yoursite.powerappsportals.com/signin-aad-b2c_1`
-   - **Supported account types**: Accounts in this organizational directory only
+**Quick Links** (for dashboard):
 
-4. Enable tokens:
-   - Go to **Authentication**
-   - Enable **Access tokens** and **ID tokens**
+| Name            | URL      |
+| --------------- | -------- |
+| Documentation   | /docs    |
+| FAQs            | /faq     |
+| Contact Support | /support |
 
-#### Step 3: Create User Flows
+### 9.4 Create Site Markers
 
-Create sign-up/sign-in and password reset user flows:
+Create these Site Markers:
 
-1. Go to **User flows** in your B2C tenant
-2. Create **Sign up and sign in** flow (B2C_1_SignUpSignIn)
-3. Create **Password reset** flow (B2C_1_ResetPassword)
-4. Configure user attributes as needed
+| Name         | Page                    |
+| ------------ | ----------------------- |
+| ServiceCard1 | (your new request page) |
+| ServiceCard2 | (your submissions page) |
+| ServiceCard3 | (your profile page)     |
+| ServiceCard4 | (your support page)     |
+| FooterLink1  | (terms page)            |
+| FooterLink2  | (privacy page)          |
+| FooterLink3  | (contact page)          |
 
-#### Step 4: Configure Power Pages
+### 9.5 Update Page Template Assignment
 
-1. In Power Pages design studio, go to **Security** → **Identity providers**
-2. Select **Azure Active Directory B2C** → **Configure**
-3. Enter:
-   - **Authority**: Your B2C issuer URL (with `tfp`)
-   - **Client ID**: Application ID from B2C
-   - **Redirect URI**: Your site URL
+Ensure the home page uses the new template:
 
-### Web Roles and Permissions
-
-Configure access control after deployment:
-
-1. Open **Power Pages Management** app
-2. Navigate to **Security** → **Web Roles**
-3. Create roles:
-   - **Anonymous Users**: Public access
-   - **Authenticated Users**: Logged-in access
-   - **Administrators**: Full access
-
-4. Assign **Table Permissions** to roles
-5. Configure **Page Permissions** as needed
+1. Open Portal Management
+2. Navigate to **Web Pages** → **Home**
+3. Set **Page Template** to `CS-Home-SP`
 
 ---
 
-## Content Snippets
+## Step 10: Verify Deployment
 
-Content snippets are managed in `snippets.json`:
+1. **Anonymous View** : Visit your site while logged out
 
-```json
-{
-  "snippet-name": [
-    "English content",
-    "French content"
-  ]
-}
-```
+* Should see the full-height hero section
+* Sidebar navigation should work
+* All sections should be visible
 
-**Adding New Snippets:**
+1. **Authenticated View** : Log in to your site
 
-1. Edit `files/liquid/contentsnippets/snippets.json`
-2. Add your snippet with both language versions
-3. Re-run the deployment script
-
-**Using Snippets in Templates:**
-
-```liquid
-{{ snippets['snippet-name'] }}
-```
-
-**File-Based Snippets:**
-
-Place `.js`, `.css`, or `.html` files in the contentsnippets folder. The script automatically creates snippets from these files with the filename (minus extension) as the snippet name.
+* Should see the dashboard layout
+* Service cards should link correctly
+* Profile dropdown should work
 
 ---
 
 ## Troubleshooting
 
-### Common Issues
+### Templates Not Showing
 
-#### Token Acquisition Failed
+* Run **Sync** in Power Pages design studio
+* Clear browser cache
+* Check that template names match exactly
 
-```
-Failed to acquire token. Response:
-{"error": "invalid_client", ...}
-```
+### Images Not Loading
 
-**Solution:** Verify your `clientId` and `clientSecret` are correct. Ensure the app registration has proper Dynamics CRM permissions.
+* Verify web files are created correctly
+* Check the partial URL matches the snippet values
+* Ensure web files are published (not draft)
 
-#### Website ID Not Found
+### Sidebar Not Working
 
-```
-HOME_PAGE_ID: null
-```
+* Check that Bootstrap 5 JS is loaded
+* Verify the footer template includes the JavaScript
+* Check browser console for errors
 
-**Solution:** Verify the `websiteId` in your configuration. Open the website record in Power Pages Management to confirm the GUID.
+### Styles Not Applied
 
-#### French Language Not Found
+* Ensure CS-Styles template is deployed
+* Verify it's included in your page template
+* Check for CSS conflicts with other templates
 
-```
-French Language ID: null
-```
+---
 
-**Solution:** Install the French language pack in your Dataverse environment:
-
-1. Go to Power Platform Admin Center
-2. Select your environment → Settings
-3. Languages → Enable French
-
-#### Permission Denied
+## Quick Reference: Template Hierarchy
 
 ```
-HTTP 403 Forbidden
-```
-
-**Solution:** Ensure your Azure AD app has admin consent for Dynamics CRM permissions and that your user account has appropriate environment roles.
-
-### Debug Mode
-
-Enable debug output by examining stderr messages:
-
-```bash
-./deploy.sh 2>&1 | tee deployment.log
-```
-
-### Verify API Connectivity
-
-Test API access manually:
-
-```bash
-curl -s -X GET "https://yourorg.api.crm3.dynamics.com/api/data/v9.2/mspp_websites" \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -H "Accept: application/json"
+Page Template (e.g., CS-Home-SP)
+├── Includes CS-Styles (CSS)
+├── Includes CS-header (navigation)
+├── Main Content
+│   ├── For anonymous: Hero, About, Services, etc.
+│   └── For authenticated: Dashboard, Cards, Activity
+└── Includes CS-footer (footer + JS)
 ```
 
 ---
 
-## Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Development Guidelines
-
-See `developer-guidelines.md` in the repository for coding standards and best practices.
-
----
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Files Checklist
 
 ```
-MIT License
-
-Copyright (c) 2026 Frederick Pearson
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+BuildStylishPortfolio/
+├── deploy.sh                              ✓ Deployment script
+├── connection.json                        ✓ Your configuration
+├── files/
+│   ├── liquid/
+│   │   ├── webtemplates/
+│   │   │   ├── CS-Styles.liquid           ✓ All CSS
+│   │   │   ├── CS-header.liquid           ✓ Header/Navigation
+│   │   │   ├── CS-footer.liquid           ✓ Footer + JS
+│   │   │   ├── CS-Home-SP.liquid          ✓ Home page
+│   │   │   ├── CS-Layout-1-Column.liquid  ✓ 1-column layout
+│   │   │   ├── CS-Layout-1-Column-with-Left-Nav.liquid ✓
+│   │   │   ├── CS-Wizard-Step.liquid      ✓ Wizard template
+│   │   │   ├── CS-Wizard-Style.liquid     ✓ Wizard CSS
+│   │   │   ├── CS-Weblink-List-Group-Left.liquid ✓
+│   │   │   ├── CS-Web-Link-Button.liquid  ✓ Pagination
+│   │   │   └── CS-Validation-Wizard-Step.liquid ✓
+│   │   └── contentsnippets/
+│   │       └── snippets.json              ✓ All content snippets
+│   ├── sp-bg-masthead.jpg                 ✓ Hero background
+│   ├── sp-bg-callout.jpg                  ✓ Callout background
+│   ├── sp-portfolio-1.jpg                 ✓ Portfolio images
+│   ├── sp-portfolio-2.jpg                 ✓
+│   ├── sp-portfolio-3.jpg                 ✓
+│   ├── sp-portfolio-4.jpg                 ✓
+│   ├── sp-logo.png                        ✓ Main logo
+│   └── sp-logo-white.png                  ✓ White logo
 ```
 
 ---
 
-## Acknowledgments
-
-- **Government of Canada** - GCWeb and WET-BOEW frameworks
-- **Microsoft** - Power Pages platform and documentation
-- **Open Source Community** - Bootstrap, Liquid templating
-
----
-
-## Resources
-
-### Official Documentation
-
-- [Power Pages Documentation](https://learn.microsoft.com/en-us/power-pages/)
-- [GCWeb Theme Documentation](https://wet-boew.github.io/GCWeb/index-en.html)
-- [WET-BOEW Documentation](https://wet-boew.github.io/wet-boew/index-en.html)
-- [Azure AD B2C Documentation](https://learn.microsoft.com/en-us/azure/active-directory-b2c/)
-
-### Related Projects
-
-- [wet-boew/GCWeb](https://github.com/wet-boew/GCWeb) - Official GCWeb repository
-- [wet-boew/wet-boew](https://github.com/wet-boew/wet-boew) - Web Experience Toolkit
-- [Power Platform CLI](https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction)
-
----
-
-**Built with ❤️ by [CloudStrucc Inc.](https://cloudstrucc.com)**
+**Need Help?** Check the main [PowerPages-Template-Engine README](https://github.com/Cloudstrucc/PowerPages-Template-Engine) for detailed troubleshooting.
