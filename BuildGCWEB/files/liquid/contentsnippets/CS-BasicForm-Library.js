@@ -1,6 +1,6 @@
 // ========================================
 // CS Basic Form Library v1.2
-// CloudStrucc Form Enhancement Toolkit
+// Cloudstrucc Form Enhancement Toolkit
 // ========================================
 //
 // DESCRIPTION:
