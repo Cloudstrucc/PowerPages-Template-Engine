@@ -1,199 +1,375 @@
 <section class="pricing-section">
     <div class="container">
-        <div class="section-header">
-            <span class="section-badge">Pricing</span>
+        <!-- Header -->
+        <div class="pricing-header">
+            <div class="pricing-badge">PRICING</div>
             <h1>Simple, Transparent Pricing</h1>
-            <p>Choose the plan that fits your needs. All plans include our core deployment engine.</p>
+            <p class="pricing-subtitle">Choose the plan that fits your needs. All plans include our core deployment engine.</p>
         </div>
 
-        {{#if canceled}}
-        <div class="alert alert-info">
-            <p>Payment was cancelled. You can try again when you're ready.</p>
-        </div>
-        {{/if}}
-
-        <div class="pricing-toggle">
-            <span class="toggle-label">Monthly</span>
-            <label class="toggle">
-                <input type="checkbox" id="billingToggle">
+        <!-- Billing Toggle -->
+        <div class="billing-toggle-wrapper">
+            <span class="billing-label" id="monthly-label">Monthly</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="billing-toggle">
                 <span class="toggle-slider"></span>
             </label>
-            <span class="toggle-label">Annual <span class="save-badge">Save 20%</span></span>
+            <span class="billing-label active" id="annual-label">Annual</span>
+            <span class="save-badge">Save 20%</span>
         </div>
 
-        <input type="hidden" name="_csrf" value="{{csrfToken}}">
-
-        <div class="pricing-grid">
-            <!-- Basic Plan -->
+        <!-- Pricing Cards -->
+        <div class="pricing-cards-container">
+            <!-- Free Tier -->
             <div class="pricing-card">
-                <div class="pricing-header">
-                    <h3>Basic</h3>
-                    <p class="pricing-description">For individual developers and small projects</p>
+                <div class="pricing-card-header">
+                    <h3>Free</h3>
+                    <p class="card-subtitle">Perfect for trying out our platform</p>
                 </div>
-                <div class="pricing-price">
-                    <span class="price-currency">$</span>
-                    <span class="price-amount" data-monthly="50" data-annual="40">50</span>
-                    <span class="price-period">/theme/month</span>
+                <div class="pricing-amount">
+                    <span class="currency">$</span>
+                    <span class="price">0</span>
+                    <span class="period">/month</span>
                 </div>
-                <ul class="pricing-features">
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Bootstrap 3, 4 & 5 support
-                    </li>
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Up to 3 themes
-                    </li>
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Automatic theme validation
-                    </li>
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Email notifications
-                    </li>
-                    <li class="excluded">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"/>
-                            <line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                        Priority support
-                    </li>
-                    <li class="excluded">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"/>
-                            <line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                        Theme updates
-                    </li>
+                <ul class="features-list">
+                    <li><i class="bi bi-check-circle-fill"></i> 10 diagrams/day</li>
+                    <li><i class="bi bi-check-circle-fill"></i> All cloud providers</li>
+                    <li><i class="bi bi-check-circle-fill"></i> PNG & Draw.io export</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Standard quality</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Community support</li>
                 </ul>
-                {{#if isAuthenticated}}
-                <button data-checkout data-plan="basic" class="btn-outline btn-block">Get Started</button>
-                {{else}}
-                <a href="/auth/register?plan=basic" class="btn-outline btn-block">Get Started</a>
-                {{/if}}
+                <a href="/auth/register" class="btn-pricing btn-outline">Get Started</a>
             </div>
 
-            <!-- Pro Plan -->
+            <!-- Standard Tier (Most Popular) -->
             <div class="pricing-card featured">
-                <div class="pricing-badge">Most Popular</div>
-                <div class="pricing-header">
-                    <h3>Pro</h3>
-                    <p class="pricing-description">For teams and growing businesses</p>
+                <div class="popular-badge">Most Popular</div>
+                <div class="pricing-card-header">
+                    <h3>Standard</h3>
+                    <p class="card-subtitle">For professional developers and small teams</p>
                 </div>
-                <div class="pricing-price">
-                    <span class="price-currency">$</span>
-                    <span class="price-amount" data-monthly="100" data-annual="80">100</span>
-                    <span class="price-period">/theme/month</span>
+                <div class="pricing-amount">
+                    <span class="currency">$</span>
+                    <span class="price" data-monthly="29" data-annual="23">29</span>
+                    <span class="period">/month</span>
                 </div>
-                <ul class="pricing-features">
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Everything in Basic
-                    </li>
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Up to 10 themes
-                    </li>
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Automatic theme updates
-                    </li>
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Priority email support (24hr)
-                    </li>
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Bootstrap version migration
-                    </li>
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Staging environment
-                    </li>
+                <ul class="features-list">
+                    <li><i class="bi bi-check-circle-fill"></i> 100 diagrams/day</li>
+                    <li><i class="bi bi-check-circle-fill"></i> All cloud providers</li>
+                    <li><i class="bi bi-check-circle-fill"></i> PNG & Draw.io export</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Enterprise quality</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Priority support</li>
+                    <li><i class="bi bi-check-circle-fill"></i> API access</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Custom templates</li>
                 </ul>
-                {{#if isAuthenticated}}
-                <button data-checkout data-plan="pro" class="btn-primary btn-block">Get Started</button>
-                {{else}}
-                <a href="/auth/register?plan=pro" class="btn-primary btn-block">Get Started</a>
-                {{/if}}
+                <a href="/auth/register" class="btn-pricing btn-primary">Get Started</a>
             </div>
 
-            <!-- Enterprise Plan -->
+            <!-- Pro Tier -->
             <div class="pricing-card">
-                <div class="pricing-header">
-                    <h3>Enterprise</h3>
-                    <p class="pricing-description">For organizations with complex needs</p>
+                <div class="pricing-card-header">
+                    <h3>Pro</h3>
+                    <p class="card-subtitle">For teams and growing businesses</p>
                 </div>
-                <div class="pricing-price">
-                    <span class="price-currency">$</span>
-                    <span class="price-amount" data-monthly="500" data-annual="400">500</span>
-                    <span class="price-period">/theme/month</span>
+                <div class="pricing-amount">
+                    <span class="currency">$</span>
+                    <span class="price" data-monthly="99" data-annual="79">99</span>
+                    <span class="period">/month</span>
                 </div>
-                <ul class="pricing-features">
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Everything in Pro
-                    </li>
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Unlimited themes
-                    </li>
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Dedicated account manager
-                    </li>
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        24/7 phone & chat support
-                    </li>
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Azure DevOps integration
-                    </li>
-                    <li class="included">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        GCWeb / WET compliance
-                    </li>
+                <ul class="features-list">
+                    <li><i class="bi bi-check-circle-fill"></i> 500 diagrams/day</li>
+                    <li><i class="bi bi-check-circle-fill"></i> All cloud providers</li>
+                    <li><i class="bi bi-check-circle-fill"></i> All export formats</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Enterprise quality</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Premium support</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Full API access</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Custom templates</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Team collaboration</li>
+                    <li><i class="bi bi-check-circle-fill"></i> SLA guarantee</li>
                 </ul>
-                {{#if isAuthenticated}}
-                <button data-checkout data-plan="enterprise" class="btn-outline btn-block">Contact Sales</button>
-                {{else}}
-                <a href="/contact?plan=enterprise" class="btn-outline btn-block">Contact Sales</a>
-                {{/if}}
+                <a href="/auth/register" class="btn-pricing btn-outline">Contact Sales</a>
             </div>
         </div>
     </div>
 </section>
+
+<style>
+.pricing-section {
+    padding: 100px 0;
+    background: linear-gradient(180deg, #f6f9ff 0%, #ffffff 100%);
+    min-height: 100vh;
+}
+
+.pricing-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.pricing-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(65, 84, 241, 0.1);
+    color: #4154f1;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.pricing-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #012970;
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+.pricing-subtitle {
+    font-size: 1.125rem;
+    color: #6c757d;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Billing Toggle */
+.billing-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 60px;
+}
+
+.billing-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #6c757d;
+    transition: color 0.3s;
+}
+
+.billing-label.active {
+    color: #012970;
+    font-weight: 600;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 30px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: #4154f1;
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(30px);
+}
+
+.save-badge {
+    padding: 4px 12px;
+    background: #10b981;
+    color: white;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* Pricing Cards */
+.pricing-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pricing-card {
+    background: white;
+    border-radius: 16px;
+    padding: 40px 30px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.pricing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.pricing-card.featured {
+    border: 3px solid #4154f1;
+    box-shadow: 0 10px 30px rgba(65, 84, 241, 0.15);
+    transform: scale(1.05);
+}
+
+.pricing-card.featured:hover {
+    transform: scale(1.05) translateY(-5px);
+}
+
+.popular-badge {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #4154f1;
+    color: white;
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.pricing-card-header h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #012970;
+    margin-bottom: 10px;
+}
+
+.card-subtitle {
+    font-size: 0.95rem;
+    color: #6c757d;
+    margin-bottom: 30px;
+}
+
+.pricing-amount {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 30px;
+}
+
+.currency {
+    font-size: 1.5rem;
+    color: #012970;
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.price {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #012970;
+    line-height: 1;
+}
+
+.period {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-left: 5px;
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 30px 0;
+}
+
+.features-list li {
+    padding: 12px 0;
+    color: #495057;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+}
+
+.features-list i {
+    color: #10b981;
+    font-size: 1.125rem;
+    flex-shrink: 0;
+}
+
+.btn-pricing {
+    display: block;
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.btn-primary {
+    background: #4154f1;
+    color: white;
+    border-color: #4154f1;
+}
+
+.btn-primary:hover {
+    background: #3244d8;
+    border-color: #3244d8;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(65, 84, 241, 0.3);
+}
+
+.btn-outline {
+    background: white;
+    color: #4154f1;
+    border-color: #4154f1;
+}
+
+.btn-outline:hover {
+    background: #4154f1;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(65, 84, 241, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .pricing-header h1 {
+        font-size: 2rem;
+    }
+    
+    .pricing-cards-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .pricing-card.featured {
+        transform: scale(1);
+    }
+    
+    .pricing-card.featured:hover {
+        transform: translateY(-5px);
+    }
+}
+</style>
