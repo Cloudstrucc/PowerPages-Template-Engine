@@ -1,0 +1,174 @@
+<section class="deploy-section">
+    <div class="container">
+        <div class="status-card" id="deploymentStatus" data-theme-id="{{theme._id}}">
+            <div class="status-header">
+                <h1>Deploying: {{theme.name}}</h1>
+                <span id="currentStatus" class="status-badge {{statusBadge theme.deployment.status}}">
+                    {{theme.deployment.status}}
+                </span>
+            </div>
+
+            <!-- Processing Section -->
+            <div id="processingSection" {{#if (or (eq theme.deployment.status 'completed') (eq theme.deployment.status 'failed'))}}style="display: none;"{{/if}}>
+                <div class="progress-container">
+                    <div class="progress-bar-container">
+                        <div id="progressBar" class="progress-fill" style="width: {{theme.deploymentProgress}}%"></div>
+                    </div>
+                    <span class="progress-text">{{theme.deploymentProgress}}%</span>
+                </div>
+
+                <div class="progress-stages">
+                    <div class="stage {{#if (or (eq theme.deployment.status 'pending') (eq theme.deployment.status 'validating') (eq theme.deployment.status 'creating_site') (eq theme.deployment.status 'deploying') (eq theme.deployment.status 'completed'))}}completed{{/if}}">
+                        <span class="stage-icon">✓</span>
+                        <span class="stage-label">Initiated</span>
+                    </div>
+                    <div class="stage {{#if (or (eq theme.deployment.status 'validating') (eq theme.deployment.status 'creating_site') (eq theme.deployment.status 'deploying') (eq theme.deployment.status 'completed'))}}completed{{/if}} {{#if (eq theme.deployment.status 'validating')}}active{{/if}}">
+                        <span class="stage-icon">{{#if (or (eq theme.deployment.status 'creating_site') (eq theme.deployment.status 'deploying') (eq theme.deployment.status 'completed'))}}✓{{else}}2{{/if}}</span>
+                        <span class="stage-label">Validating</span>
+                    </div>
+                    <div class="stage {{#if (or (eq theme.deployment.status 'creating_site') (eq theme.deployment.status 'deploying') (eq theme.deployment.status 'completed'))}}completed{{/if}} {{#if (eq theme.deployment.status 'creating_site')}}active{{/if}}">
+                        <span class="stage-icon">{{#if (or (eq theme.deployment.status 'deploying') (eq theme.deployment.status 'completed'))}}✓{{else}}3{{/if}}</span>
+                        <span class="stage-label">Preparing</span>
+                    </div>
+                    <div class="stage {{#if (eq theme.deployment.status 'completed')}}completed{{/if}} {{#if (eq theme.deployment.status 'deploying')}}active{{/if}}">
+                        <span class="stage-icon">{{#if (eq theme.deployment.status 'completed')}}✓{{else}}4{{/if}}</span>
+                        <span class="stage-label">Deploying</span>
+                    </div>
+                </div>
+
+                <div class="processing-message">
+                    <div class="processing-icon"><div class="spinner"></div></div>
+                    <h3>Deployment in Progress</h3>
+                    <p>This typically takes 3-5 minutes. You can close this page - we'll email you when done.</p>
+                </div>
+            </div>
+
+            <!-- Completed Section -->
+            <div id="completedSection" {{#unless (eq theme.deployment.status 'completed')}}style="display: none;"{{/unless}}>
+                <div class="success-message">
+                    <div class="success-icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                    </div>
+                    <h2>Deployment Complete!</h2>
+                    <p>Your theme has been deployed to Power Pages.</p>
+                    {{#if theme.deployment.powerPagesWebsiteUrl}}
+                    <div class="website-link">
+                        <label>Website URL</label>
+                        <a id="websiteLink" href="{{theme.deployment.powerPagesWebsiteUrl}}" target="_blank">
+                            {{theme.deployment.powerPagesWebsiteUrl}}
+                        </a>
+                    </div>
+                    {{/if}}
+                    <div class="success-actions">
+                        <a href="{{theme.deployment.powerPagesWebsiteUrl}}" target="_blank" class="btn-primary">View Website</a>
+                        <a href="/dashboard/themes/{{theme._id}}" class="btn-outline">Theme Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Section -->
+            <div id="errorSection" {{#unless (eq theme.deployment.status 'failed')}}style="display: none;"{{/unless}}>
+                <div class="error-message">
+                    <div class="error-icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                        </svg>
+                    </div>
+                    <h2>Deployment Failed</h2>
+                    <p id="errorMessage">{{theme.deployment.errorMessage}}</p>
+                    <div class="error-actions">
+                        <a href="/deploy" class="btn-primary">Try Again</a>
+                        <a href="/dashboard" class="btn-outline">Dashboard</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logs -->
+            <div class="logs-container">
+                <h3>Deployment Logs</h3>
+                <div id="deploymentLogs" class="logs-content">
+                    {{#each theme.deployment.deploymentLogs}}
+                    <div class="log-entry log-{{this.level}}">
+                        <span class="log-time">{{formatDate this.timestamp 'time'}}</span>
+                        <span class="log-message">{{this.message}}</span>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+const statusContainer = document.getElementById('deploymentStatus');
+const themeId = statusContainer?.dataset.themeId;
+
+if (themeId) {
+    pollDeploymentStatus(themeId);
+}
+
+async function pollDeploymentStatus(themeId) {
+    try {
+        const response = await fetch(`/deploy/api/status/${themeId}`);
+        const data = await response.json();
+        updateStatusUI(data);
+        if (!['completed', 'failed'].includes(data.status)) {
+            setTimeout(() => pollDeploymentStatus(themeId), 3000);
+        }
+    } catch (error) {
+        console.error('Status polling error:', error);
+        setTimeout(() => pollDeploymentStatus(themeId), 5000);
+    }
+}
+
+function updateStatusUI(data) {
+    document.getElementById('currentStatus').textContent = data.status;
+    document.getElementById('currentStatus').className = 'status-badge ' + getStatusClass(data.status);
+    document.getElementById('progressBar').style.width = data.progress + '%';
+    
+    if (data.logs) {
+        const logsEl = document.getElementById('deploymentLogs');
+        logsEl.innerHTML = data.logs.map(log => 
+            `<div class="log-entry log-${log.level}">
+                <span class="log-time">${new Date(log.timestamp).toLocaleTimeString()}</span>
+                <span class="log-message">${log.message}</span>
+            </div>`
+        ).join('');
+        logsEl.scrollTop = logsEl.scrollHeight;
+    }
+    
+    if (data.status === 'completed') {
+        document.getElementById('processingSection').style.display = 'none';
+        document.getElementById('completedSection').style.display = 'block';
+        if (data.websiteUrl) {
+            document.getElementById('websiteLink').href = data.websiteUrl;
+            document.getElementById('websiteLink').textContent = data.websiteUrl;
+        }
+    }
+    
+    if (data.status === 'failed') {
+        document.getElementById('processingSection').style.display = 'none';
+        document.getElementById('errorSection').style.display = 'block';
+        if (data.errorMessage) {
+            document.getElementById('errorMessage').textContent = data.errorMessage;
+        }
+    }
+}
+
+function getStatusClass(status) {
+    const classes = {
+        'pending': 'badge-secondary',
+        'validating': 'badge-info',
+        'creating_site': 'badge-info',
+        'deploying': 'badge-warning',
+        'completed': 'badge-success',
+        'failed': 'badge-danger'
+    };
+    return classes[status] || 'badge-secondary';
+}
+</script>

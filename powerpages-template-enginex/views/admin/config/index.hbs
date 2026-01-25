@@ -1,0 +1,62 @@
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2>Site Configuration</h2>
+        {{#if isSuperAdmin}}
+        <form action="/admin/config/initialize-defaults" method="POST" style="display: inline;">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <button type="submit" class="admin-btn admin-btn-secondary admin-btn-sm">Reset to Defaults</button>
+        </form>
+        {{/if}}
+    </div>
+    
+    <div class="admin-card-body">
+        {{#each configsByCategory}}
+        <div style="margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 1rem; font-size: 1rem; font-weight: 600; text-transform: capitalize; color: #374151;">
+                {{@key}} Settings
+            </h3>
+            
+            <div style="background: #f8fafc; border-radius: 0.5rem; padding: 1rem;">
+                {{#each this}}
+                <form action="/admin/config/update" method="POST" style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #e2e8f0;">
+                    <input type="hidden" name="_csrf" value="{{../../csrfToken}}">
+                    <input type="hidden" name="key" value="{{this.key}}">
+                    <input type="hidden" name="valueType" value="{{this.valueType}}">
+                    
+                    <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">
+                                {{this.key}}
+                            </label>
+                            {{#if this.description}}
+                            <p style="font-size: 0.75rem; color: #64748b; margin: 0 0 0.5rem;">{{this.description}}</p>
+                            {{/if}}
+                            
+                            {{#if (eq this.valueType 'boolean')}}
+                            <select name="value" style="padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem;">
+                                <option value="true" {{#if this.value}}selected{{/if}}>True</option>
+                                <option value="false" {{#unless this.value}}selected{{/unless}}>False</option>
+                            </select>
+                            {{else if (eq this.valueType 'number')}}
+                            <input type="number" name="value" value="{{this.value}}" style="padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem; width: 200px;">
+                            {{else if (eq this.valueType 'array')}}
+                            <textarea name="value" rows="3" style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 0.875rem;">{{join this.value '\n'}}</textarea>
+                            <span style="font-size: 0.7rem; color: #64748b;">One item per line</span>
+                            {{else if (eq this.valueType 'json')}}
+                            <textarea name="value" rows="6" style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem; font-family: monospace; font-size: 0.75rem;">{{json this.value}}</textarea>
+                            {{else}}
+                            <input type="{{#if this.isSensitive}}password{{else}}text{{/if}}" name="value" value="{{this.value}}" style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem;">
+                            {{/if}}
+                        </div>
+                        
+                        {{#if this.isEditable}}
+                        <button type="submit" class="admin-btn admin-btn-secondary admin-btn-sm" style="margin-top: 1.5rem;">Save</button>
+                        {{/if}}
+                    </div>
+                </form>
+                {{/each}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>

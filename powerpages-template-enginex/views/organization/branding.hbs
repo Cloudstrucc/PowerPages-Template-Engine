@@ -1,0 +1,187 @@
+<section class="dashboard-section">
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Branding - {{organization.name}}</h1>
+            <p>Customize your organization's branding for deployed themes</p>
+        </div>
+
+        {{#unless isOrgAdmin}}
+        <div class="alert alert-warning">
+            <p>Only organization admins can update branding settings.</p>
+        </div>
+        {{/unless}}
+
+        <div class="dashboard-card">
+            <form action="/organization/{{organization._id}}/branding" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+                <!-- Logos Section -->
+                <div class="form-section">
+                    <h3>Logo & Identity</h3>
+                    <p class="form-section-desc">Upload your organization logos for use in deployed themes</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="logo">Primary Logo (for light backgrounds)</label>
+                            {{#if organization.branding.logo.url}}
+                            <div class="current-logo">
+                                <img src="{{organization.branding.logo.url}}" alt="Current logo" style="max-height: 60px; margin-bottom: 0.5rem;">
+                            </div>
+                            {{/if}}
+                            <input type="file" id="logo" name="logo" accept="image/*">
+                            <span class="form-hint">Recommended: PNG or SVG, at least 200px wide</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="logoDark">Logo for Dark Backgrounds</label>
+                            {{#if organization.branding.logoDark.url}}
+                            <div class="current-logo" style="background: #1e293b; padding: 0.5rem; border-radius: 4px;">
+                                <img src="{{organization.branding.logoDark.url}}" alt="Dark logo" style="max-height: 60px;">
+                            </div>
+                            {{/if}}
+                            <input type="file" id="logoDark" name="logoDark" accept="image/*">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="favicon">Favicon</label>
+                            {{#if organization.branding.favicon.url}}
+                            <img src="{{organization.branding.favicon.url}}" alt="Favicon" style="width: 32px; height: 32px; margin-bottom: 0.5rem;">
+                            {{/if}}
+                            <input type="file" id="favicon" name="favicon" accept=".ico,.png,.svg">
+                            <span class="form-hint">ICO, PNG, or SVG, 32x32px or 64x64px</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="icon">Icon Only (for small spaces)</label>
+                            {{#if organization.branding.icon.url}}
+                            <img src="{{organization.branding.icon.url}}" alt="Icon" style="width: 48px; height: 48px; margin-bottom: 0.5rem;">
+                            {{/if}}
+                            <input type="file" id="icon" name="icon" accept="image/*">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="logoAltText">Logo Alt Text</label>
+                        <input type="text" id="logoAltText" name="logoAltText" value="{{organization.branding.logo.altText}}" placeholder="{{organization.name}} logo">
+                    </div>
+                </div>
+
+                <!-- Colors Section -->
+                <div class="form-section">
+                    <h3>Brand Colors</h3>
+                    <p class="form-section-desc">These colors will be injected as CSS variables into deployed themes</p>
+
+                    <div class="form-row color-row">
+                        <div class="form-group">
+                            <label for="primaryColor">Primary Color</label>
+                            <div class="color-input-wrapper">
+                                <input type="color" id="primaryColor" name="primaryColor" value="{{default organization.branding.colors.primary '#2563eb'}}">
+                                <input type="text" value="{{default organization.branding.colors.primary '#2563eb'}}" class="color-text" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="secondaryColor">Secondary Color</label>
+                            <div class="color-input-wrapper">
+                                <input type="color" id="secondaryColor" name="secondaryColor" value="{{default organization.branding.colors.secondary '#1e40af'}}">
+                                <input type="text" value="{{default organization.branding.colors.secondary '#1e40af'}}" class="color-text" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="accentColor">Accent Color</label>
+                            <div class="color-input-wrapper">
+                                <input type="color" id="accentColor" name="accentColor" value="{{default organization.branding.colors.accent '#06b6d4'}}">
+                                <input type="text" value="{{default organization.branding.colors.accent '#06b6d4'}}" class="color-text" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row color-row">
+                        <div class="form-group">
+                            <label for="textColor">Text Color</label>
+                            <div class="color-input-wrapper">
+                                <input type="color" id="textColor" name="textColor" value="{{default organization.branding.colors.text '#1e293b'}}">
+                                <input type="text" value="{{default organization.branding.colors.text '#1e293b'}}" class="color-text" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="backgroundColor">Background Color</label>
+                            <div class="color-input-wrapper">
+                                <input type="color" id="backgroundColor" name="backgroundColor" value="{{default organization.branding.colors.background '#ffffff'}}">
+                                <input type="text" value="{{default organization.branding.colors.background '#ffffff'}}" class="color-text" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Typography Section -->
+                <div class="form-section">
+                    <h3>Typography</h3>
+                    <p class="form-section-desc">Choose fonts for your deployed themes</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="headingFont">Heading Font</label>
+                            <input type="text" id="headingFont" name="headingFont" value="{{default organization.branding.fonts.heading 'Plus Jakarta Sans'}}" placeholder="Plus Jakarta Sans">
+                        </div>
+                        <div class="form-group">
+                            <label for="bodyFont">Body Font</label>
+                            <input type="text" id="bodyFont" name="bodyFont" value="{{default organization.branding.fonts.body 'Plus Jakarta Sans'}}" placeholder="Plus Jakarta Sans">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="googleFontsUrl">Google Fonts URL (optional)</label>
+                        <input type="url" id="googleFontsUrl" name="googleFontsUrl" value="{{organization.branding.fonts.googleFontsUrl}}" placeholder="https://fonts.googleapis.com/css2?family=...">
+                        <span class="form-hint">Paste the full Google Fonts embed URL</span>
+                    </div>
+                </div>
+
+                <!-- Custom CSS Section -->
+                <div class="form-section">
+                    <h3>Custom CSS (Advanced)</h3>
+                    <p class="form-section-desc">Add custom CSS that will be appended to deployed themes</p>
+
+                    <div class="form-group">
+                        <label for="customCss">Custom CSS</label>
+                        <textarea id="customCss" name="customCss" rows="10" placeholder="/* Your custom CSS here */">{{organization.branding.customCss}}</textarea>
+                    </div>
+                </div>
+
+                <!-- Preview -->
+                <div class="form-section">
+                    <h3>Preview</h3>
+                    <div class="branding-preview" style="padding: 2rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; background: {{default organization.branding.colors.background '#ffffff'}};">
+                        {{#if organization.branding.logo.url}}
+                        <img src="{{organization.branding.logo.url}}" alt="Logo preview" style="max-height: 50px; margin-bottom: 1rem;">
+                        {{else}}
+                        <div style="font-size: 1.5rem; font-weight: 700; color: {{default organization.branding.colors.primary '#2563eb'}}; margin-bottom: 1rem;">{{organization.name}}</div>
+                        {{/if}}
+                        <h4 style="color: {{default organization.branding.colors.text '#1e293b'}}; font-family: {{default organization.branding.fonts.heading 'Plus Jakarta Sans'}};">Sample Heading</h4>
+                        <p style="color: {{default organization.branding.colors.text '#1e293b'}}; font-family: {{default organization.branding.fonts.body 'Plus Jakarta Sans'}};">This is how your body text will appear in deployed themes.</p>
+                        <button type="button" style="background: {{default organization.branding.colors.primary '#2563eb'}}; color: white; padding: 0.5rem 1rem; border: none; border-radius: 0.375rem; cursor: pointer;">Primary Button</button>
+                        <button type="button" style="background: {{default organization.branding.colors.secondary '#1e40af'}}; color: white; padding: 0.5rem 1rem; border: none; border-radius: 0.375rem; cursor: pointer; margin-left: 0.5rem;">Secondary Button</button>
+                    </div>
+                </div>
+
+                {{#if isOrgAdmin}}
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Save Branding</button>
+                    <a href="/organization/{{organization._id}}" class="btn-outline">Cancel</a>
+                </div>
+                {{/if}}
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+// Sync color inputs with text display
+document.querySelectorAll('input[type="color"]').forEach(input => {
+    input.addEventListener('input', function() {
+        const textInput = this.parentElement.querySelector('.color-text');
+        if (textInput) {
+            textInput.value = this.value;
+        }
+    });
+});
+</script>

@@ -1,0 +1,239 @@
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2>{{#if isNew}}Add Gallery Theme{{else}}Edit: {{theme.name}}{{/if}}</h2>
+        <a href="/admin/gallery-themes" class="admin-btn admin-btn-secondary">Back to List</a>
+    </div>
+    
+    <div class="admin-card-body">
+        <form action="/admin/gallery-themes/save" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            {{#unless isNew}}
+            <input type="hidden" name="themeId" value="{{theme._id}}">
+            {{/unless}}
+            
+            <!-- Basic Info -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem; font-size: 1rem; font-weight: 600;">Basic Information</h3>
+                
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="name">Theme Name *</label>
+                        <input type="text" id="name" name="name" value="{{theme.name}}" required>
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="slug">URL Slug</label>
+                        <input type="text" id="slug" name="slug" value="{{theme.slug}}" placeholder="auto-generated from name">
+                    </div>
+                </div>
+                
+                <div class="admin-form-group">
+                    <label for="description">Short Description</label>
+                    <input type="text" id="description" name="description" value="{{theme.description}}" maxlength="200">
+                </div>
+                
+                <div class="admin-form-group">
+                    <label for="longDescription">Long Description</label>
+                    <textarea id="longDescription" name="longDescription" rows="4">{{theme.longDescription}}</textarea>
+                </div>
+            </div>
+            
+            <!-- Category & Bootstrap -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem; font-size: 1rem; font-weight: 600;">Categorization</h3>
+                
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="category">Category *</label>
+                        <select id="category" name="category" required>
+                            <option value="landing" {{#if (eq theme.category 'landing')}}selected{{/if}}>Landing Page</option>
+                            <option value="portfolio" {{#if (eq theme.category 'portfolio')}}selected{{/if}}>Portfolio</option>
+                            <option value="business" {{#if (eq theme.category 'business')}}selected{{/if}}>Business</option>
+                            <option value="blog" {{#if (eq theme.category 'blog')}}selected{{/if}}>Blog</option>
+                            <option value="admin" {{#if (eq theme.category 'admin')}}selected{{/if}}>Admin Dashboard</option>
+                            <option value="ecommerce" {{#if (eq theme.category 'ecommerce')}}selected{{/if}}>E-Commerce</option>
+                            <option value="government" {{#if (eq theme.category 'government')}}selected{{/if}}>Government</option>
+                            <option value="other" {{#if (eq theme.category 'other')}}selected{{/if}}>Other</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="bootstrapVersion">Bootstrap Version *</label>
+                        <select id="bootstrapVersion" name="bootstrapVersion" required>
+                            <option value="5" {{#if (eq theme.bootstrapVersion '5')}}selected{{/if}}>Bootstrap 5</option>
+                            <option value="4" {{#if (eq theme.bootstrapVersion '4')}}selected{{/if}}>Bootstrap 4</option>
+                            <option value="3" {{#if (eq theme.bootstrapVersion '3')}}selected{{/if}}>Bootstrap 3</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="admin-form-group">
+                    <label for="tags">Tags (comma-separated)</label>
+                    <input type="text" id="tags" name="tags" value="{{join theme.tags ', '}}" placeholder="landing, business, modern">
+                </div>
+            </div>
+            
+            <!-- URLs -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem; font-size: 1rem; font-weight: 600;">URLs & Resources</h3>
+                
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="previewImage">Preview Image URL *</label>
+                        <input type="url" id="previewImage" name="previewImage" value="{{theme.previewImage}}" required>
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="previewImageFile">Or Upload Image</label>
+                        <input type="file" id="previewImageFile" name="previewImageFile" accept="image/*">
+                    </div>
+                </div>
+                
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="demoUrl">Demo URL</label>
+                        <input type="url" id="demoUrl" name="demoUrl" value="{{theme.demoUrl}}">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="downloadUrl">Download URL (ZIP) *</label>
+                        <input type="url" id="downloadUrl" name="downloadUrl" value="{{theme.downloadUrl}}" required>
+                    </div>
+                </div>
+                
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="sourceUrl">Source URL (GitHub, etc.)</label>
+                        <input type="url" id="sourceUrl" name="sourceUrl" value="{{theme.sourceUrl}}">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="documentationUrl">Documentation URL</label>
+                        <input type="url" id="documentationUrl" name="documentationUrl" value="{{theme.documentationUrl}}">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Author & License -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem; font-size: 1rem; font-weight: 600;">Author & License</h3>
+                
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="authorName">Author Name</label>
+                        <input type="text" id="authorName" name="authorName" value="{{theme.author.name}}">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="authorUrl">Author URL</label>
+                        <input type="url" id="authorUrl" name="authorUrl" value="{{theme.author.url}}">
+                    </div>
+                </div>
+                
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="licenseType">License</label>
+                        <select id="licenseType" name="licenseType">
+                            <option value="MIT" {{#if (eq theme.license.type 'MIT')}}selected{{/if}}>MIT</option>
+                            <option value="Apache-2.0" {{#if (eq theme.license.type 'Apache-2.0')}}selected{{/if}}>Apache 2.0</option>
+                            <option value="GPL-3.0" {{#if (eq theme.license.type 'GPL-3.0')}}selected{{/if}}>GPL 3.0</option>
+                            <option value="CC-BY-4.0" {{#if (eq theme.license.type 'CC-BY-4.0')}}selected{{/if}}>Creative Commons BY 4.0</option>
+                            <option value="Commercial" {{#if (eq theme.license.type 'Commercial')}}selected{{/if}}>Commercial</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="licenseUrl">License URL</label>
+                        <input type="url" id="licenseUrl" name="licenseUrl" value="{{theme.license.url}}">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Compatibility -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem; font-size: 1rem; font-weight: 600;">Compatibility</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                    <label class="admin-checkbox">
+                        <input type="checkbox" name="powerPagesEnhancedDataModel" value="true" {{#if theme.compatibility.powerPagesEnhancedDataModel}}checked{{/if}}>
+                        Power Pages Enhanced Data Model
+                    </label>
+                    <label class="admin-checkbox">
+                        <input type="checkbox" name="powerPagesStandardDataModel" value="true" {{#if theme.compatibility.powerPagesStandardDataModel}}checked{{/if}}>
+                        Power Pages Standard Data Model
+                    </label>
+                    <label class="admin-checkbox">
+                        <input type="checkbox" name="gcwebCompliant" value="true" {{#if theme.compatibility.gcwebCompliant}}checked{{/if}}>
+                        GCWeb Compliant
+                    </label>
+                    <label class="admin-checkbox">
+                        <input type="checkbox" name="wetCompliant" value="true" {{#if theme.compatibility.wetCompliant}}checked{{/if}}>
+                        WET Compliant
+                    </label>
+                </div>
+                
+                <div class="admin-form-group" style="margin-top: 1rem;">
+                    <label for="wcagLevel">WCAG Accessibility Level</label>
+                    <select id="wcagLevel" name="wcagLevel" style="width: 200px;">
+                        <option value="none" {{#if (eq theme.compatibility.wcagLevel 'none')}}selected{{/if}}>Not Tested</option>
+                        <option value="A" {{#if (eq theme.compatibility.wcagLevel 'A')}}selected{{/if}}>Level A</option>
+                        <option value="AA" {{#if (eq theme.compatibility.wcagLevel 'AA')}}selected{{/if}}>Level AA</option>
+                        <option value="AAA" {{#if (eq theme.compatibility.wcagLevel 'AAA')}}selected{{/if}}>Level AAA</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Features -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem; font-size: 1rem; font-weight: 600;">Features</h3>
+                
+                <div class="admin-form-group">
+                    <label for="features">Features (one per line)</label>
+                    <textarea id="features" name="features" rows="5" placeholder="Responsive design&#10;Mobile-first approach&#10;SEO optimized">{{join theme.features '\n'}}</textarea>
+                </div>
+            </div>
+            
+            <!-- Pricing -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem; font-size: 1rem; font-weight: 600;">Pricing</h3>
+                
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="isFree">Pricing Type</label>
+                        <select id="isFree" name="isFree">
+                            <option value="true" {{#if theme.pricing.isFree}}selected{{/if}}>Free</option>
+                            <option value="false" {{#unless theme.pricing.isFree}}selected{{/unless}}>Premium</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="price">Price (if premium)</label>
+                        <input type="number" id="price" name="price" value="{{theme.pricing.price}}" min="0" step="0.01">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Display Settings -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem; font-size: 1rem; font-weight: 600;">Display Settings</h3>
+                
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="displayOrder">Display Order</label>
+                        <input type="number" id="displayOrder" name="displayOrder" value="{{default theme.displayOrder 0}}" min="0">
+                    </div>
+                    <div class="admin-form-group" style="display: flex; align-items: flex-end; gap: 2rem; padding-bottom: 0.5rem;">
+                        <label class="admin-checkbox">
+                            <input type="checkbox" name="isFeatured" value="true" {{#if theme.isFeatured}}checked{{/if}}>
+                            Featured Theme
+                        </label>
+                        <label class="admin-checkbox">
+                            <input type="checkbox" name="isPublished" value="true" {{#if theme.isPublished}}checked{{/if}}>
+                            Published
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Submit -->
+            <div class="admin-actions">
+                <button type="submit" class="admin-btn admin-btn-primary">
+                    {{#if isNew}}Create Theme{{else}}Save Changes{{/if}}
+                </button>
+                <a href="/admin/gallery-themes" class="admin-btn admin-btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

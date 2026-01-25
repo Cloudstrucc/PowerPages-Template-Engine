@@ -1,0 +1,81 @@
+<section class="deploy-section">
+    <div class="container">
+        <div class="deploy-wizard">
+            <div class="wizard-progress">
+                <div class="progress-step active"><span class="step-number">1</span><span class="step-label">Theme</span></div>
+                <div class="progress-connector"></div>
+                <div class="progress-step"><span class="step-number">2</span><span class="step-label">Branding</span></div>
+                <div class="progress-connector"></div>
+                <div class="progress-step"><span class="step-number">3</span><span class="step-label">Target</span></div>
+                <div class="progress-connector"></div>
+                <div class="progress-step"><span class="step-number">4</span><span class="step-label">Deploy</span></div>
+            </div>
+
+            <div class="wizard-content">
+                <h1>Deploy a Theme to Power Pages</h1>
+                <p>Choose a theme from our gallery or upload your own Bootstrap template</p>
+
+                <form action="/deploy/step2" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+                    <div class="theme-source-tabs">
+                        <button type="button" class="tab-btn active" data-tab="gallery">Gallery Themes</button>
+                        <button type="button" class="tab-btn" data-tab="upload">Upload Custom</button>
+                    </div>
+
+                    <div class="tab-content active" id="gallery-tab">
+                        <input type="hidden" name="themeSource" value="gallery" id="themeSourceInput">
+                        
+                        <div class="gallery-grid">
+                            {{#each featuredThemes}}
+                            <label class="gallery-theme-card {{#if (eq this._id ../selectedGalleryTheme._id)}}selected{{/if}}">
+                                <input type="radio" name="galleryThemeId" value="{{this._id}}" {{#if (eq this._id ../selectedGalleryTheme._id)}}checked{{/if}}>
+                                <img src="{{this.previewImage}}" alt="{{this.name}}">
+                                <div class="theme-card-info">
+                                    <h4>{{this.name}}</h4>
+                                    <span class="theme-tag">Bootstrap {{this.bootstrapVersion}}</span>
+                                </div>
+                            </label>
+                            {{/each}}
+                        </div>
+                        <p style="text-align: center; margin-top: 1rem;"><a href="/themes">Browse all themes →</a></p>
+                    </div>
+
+                    <div class="tab-content" id="upload-tab">
+                        <div class="upload-area" id="dropZone">
+                            <div class="upload-icon-large">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                            </div>
+                            <h3 class="upload-text">Drag & drop your theme ZIP</h3>
+                            <p>or click to browse</p>
+                            <input type="file" id="fileInput" name="themeFile" accept=".zip">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="themeName">Theme Name</label>
+                        <input type="text" id="themeName" name="themeName" value="{{selectedGalleryTheme.name}}" placeholder="My Power Pages Theme">
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-block">Continue to Branding</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById(this.dataset.tab + '-tab').classList.add('active');
+        document.getElementById('themeSourceInput').value = this.dataset.tab;
+    });
+});
+</script>

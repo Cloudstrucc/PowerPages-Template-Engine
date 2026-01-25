@@ -1,0 +1,134 @@
+<section class="deploy-section">
+    <div class="container">
+        <div class="deploy-wizard">
+            <div class="wizard-progress">
+                <div class="progress-step completed"><span class="step-number">✓</span><span class="step-label">Theme</span></div>
+                <div class="progress-connector completed"></div>
+                <div class="progress-step completed"><span class="step-number">✓</span><span class="step-label">Branding</span></div>
+                <div class="progress-connector completed"></div>
+                <div class="progress-step completed"><span class="step-number">✓</span><span class="step-label">Target</span></div>
+                <div class="progress-connector completed"></div>
+                <div class="progress-step active"><span class="step-number">4</span><span class="step-label">Deploy</span></div>
+            </div>
+
+            <div class="wizard-content">
+                {{#if newSiteInstructions}}
+                <!-- New Site Creation Instructions -->
+                <h1>Create Your Power Pages Site</h1>
+                <p>Follow these steps to create a new Power Pages site, then return here to deploy your theme</p>
+
+                <div class="instructions-card">
+                    <h3>Step-by-Step Instructions</h3>
+                    <ol class="instruction-steps">
+                        {{#each newSiteInstructions.instructions.steps}}
+                        <li>
+                            <h4>{{this.title}}</h4>
+                            <p>{{this.description}}</p>
+                            {{#if this.url}}
+                            <a href="{{this.url}}" target="_blank" class="btn-outline btn-sm">Open →</a>
+                            {{/if}}
+                        </li>
+                        {{/each}}
+                    </ol>
+
+                    <div class="cli-command" style="background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem;">
+                        <p style="margin: 0 0 0.5rem; font-size: 0.75rem; color: #94a3b8;">Or use Power Platform CLI:</p>
+                        <code>{{newSiteInstructions.instructions.cliCommand}}</code>
+                    </div>
+                </div>
+
+                <form action="/deploy/execute" method="POST" style="margin-top: 2rem;">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                    <input type="hidden" name="environmentUrl" value="{{wizardData.environmentUrl}}">
+
+                    <div class="form-group">
+                        <label for="websiteId">Enter Website ID (after creation)</label>
+                        <input type="text" id="websiteId" name="websiteId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="/deploy" class="btn-outline">Start Over</a>
+                        <button type="submit" class="btn-primary">Deploy Theme</button>
+                    </div>
+                </form>
+
+                {{else}}
+                <!-- Confirmation Summary -->
+                <h1>Confirm Deployment</h1>
+                <p>Review your deployment settings before proceeding</p>
+
+                <div class="confirmation-summary">
+                    <div class="summary-section">
+                        <h3>Theme</h3>
+                        {{#if galleryTheme}}
+                        <div class="summary-item">
+                            <img src="{{galleryTheme.previewImage}}" alt="{{galleryTheme.name}}" style="width: 120px; border-radius: 0.375rem;">
+                            <div>
+                                <strong>{{galleryTheme.name}}</strong>
+                                <p>{{galleryTheme.description}}</p>
+                                <span class="badge">Bootstrap {{galleryTheme.bootstrapVersion}}</span>
+                            </div>
+                        </div>
+                        {{else}}
+                        <div class="summary-item">
+                            <strong>{{wizardData.themeName}}</strong>
+                            <p>Custom uploaded theme</p>
+                        </div>
+                        {{/if}}
+                    </div>
+
+                    {{#if organization}}
+                    <div class="summary-section">
+                        <h3>Organization & Branding</h3>
+                        <div class="summary-item">
+                            {{#if organization.branding.logo.url}}
+                            <img src="{{organization.branding.logo.url}}" alt="{{organization.name}}" style="max-height: 40px;">
+                            {{/if}}
+                            <div>
+                                <strong>{{organization.name}}</strong>
+                                {{#if wizardData.applyBranding}}
+                                <p style="color: #16a34a;">✓ Branding will be applied</p>
+                                {{else}}
+                                <p style="color: #64748b;">Branding not applied</p>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                    {{/if}}
+
+                    <div class="summary-section">
+                        <h3>Deployment Target</h3>
+                        <div class="summary-item">
+                            <div>
+                                <strong>Environment:</strong> {{wizardData.environmentUrl}}<br>
+                                <strong>Website ID:</strong> {{wizardData.websiteId}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning" style="margin-top: 1.5rem;">
+                    <p><strong>Warning:</strong> This will replace all existing web files on the target Power Pages site. This action cannot be undone.</p>
+                </div>
+
+                <form action="/deploy/execute" method="POST">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                    <input type="hidden" name="websiteId" value="{{wizardData.websiteId}}">
+                    <input type="hidden" name="environmentUrl" value="{{wizardData.environmentUrl}}">
+
+                    <div class="form-actions">
+                        <a href="/deploy" class="btn-outline">Start Over</a>
+                        <button type="submit" class="btn-primary">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                            Deploy Now
+                        </button>
+                    </div>
+                </form>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</section>

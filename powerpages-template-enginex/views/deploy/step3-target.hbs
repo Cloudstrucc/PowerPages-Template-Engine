@@ -1,0 +1,195 @@
+<section class="deploy-section">
+    <div class="container">
+        <div class="deploy-wizard">
+            <div class="wizard-progress">
+                <div class="progress-step completed"><span class="step-number">✓</span><span class="step-label">Theme</span></div>
+                <div class="progress-connector completed"></div>
+                <div class="progress-step completed"><span class="step-number">✓</span><span class="step-label">Branding</span></div>
+                <div class="progress-connector completed"></div>
+                <div class="progress-step active"><span class="step-number">3</span><span class="step-label">Target</span></div>
+                <div class="progress-connector"></div>
+                <div class="progress-step"><span class="step-number">4</span><span class="step-label">Deploy</span></div>
+            </div>
+
+            <div class="wizard-content">
+                <h1>Select Power Pages Target</h1>
+                <p>Choose an existing Power Pages site or create a new one</p>
+
+                <form action="/deploy/step4" method="POST">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+                    <!-- Deployment Target -->
+                    <div class="target-options">
+                        <label class="target-option">
+                            <input type="radio" name="deploymentTarget" value="existing" checked>
+                            <div class="option-content">
+                                <h3>Deploy to Existing Site</h3>
+                                <p>Override an existing Power Pages website with your theme</p>
+                            </div>
+                        </label>
+                        <label class="target-option">
+                            <input type="radio" name="deploymentTarget" value="new">
+                            <div class="option-content">
+                                <h3>Create New Site</h3>
+                                <p>We'll guide you through creating a new Power Pages site</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Environment Selection -->
+                    <div class="form-section" id="environmentSection">
+                        <h3>Power Platform Environment</h3>
+                        
+                        {{#if environments.length}}
+                        <div class="form-group">
+                            <label>Select Saved Environment</label>
+                            <select id="savedEnvironment" class="form-control">
+                                <option value="">-- Select Environment --</option>
+                                {{#each environments}}
+                                <option value="{{this.environmentUrl}}" {{#if this.isDefault}}selected{{/if}}>
+                                    {{this.name}} ({{this.type}})
+                                </option>
+                                {{/each}}
+                                <option value="custom">Enter Custom URL...</option>
+                            </select>
+                        </div>
+                        {{/if}}
+
+                        <div class="form-group" id="customEnvGroup" {{#if environments.length}}style="display: none;"{{/if}}>
+                            <label for="environmentUrl">Environment URL</label>
+                            <input type="url" id="environmentUrl" name="environmentUrl" placeholder="https://org12345.crm.dynamics.com" required>
+                            <span class="form-hint">
+                                Find this in Power Platform Admin Center → Environments → Your Environment → Environment URL
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Existing Site Selection -->
+                    <div class="form-section" id="existingSiteSection">
+                        <h3>Select Website</h3>
+                        
+                        <div id="websitesList" style="display: none;">
+                            <div class="form-group">
+                                <label>Available Websites</label>
+                                <select id="websiteSelect" name="websiteId" class="form-control">
+                                    <option value="">Loading websites...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="websiteIdManual">
+                            <div class="form-group">
+                                <label for="websiteIdInput">Website ID</label>
+                                <input type="text" id="websiteIdInput" name="websiteId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+                                <span class="form-hint">
+                                    <a href="#" onclick="document.getElementById('websiteIdHelp').style.display = document.getElementById('websiteIdHelp').style.display === 'none' ? 'block' : 'none'; return false;">
+                                        Where do I find the Website ID?
+                                    </a>
+                                </span>
+                            </div>
+
+                            <div id="websiteIdHelp" style="display: none; background: #f8fafc; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+                                <h4 style="margin-top: 0;">How to find your Website ID:</h4>
+                                <ol style="padding-left: 1.5rem; margin-bottom: 0;">
+                                    <li>Go to <a href="https://make.powerpages.microsoft.com" target="_blank">make.powerpages.microsoft.com</a></li>
+                                    <li>Select your environment</li>
+                                    <li>Click on your website</li>
+                                    <li>Go to <strong>Set up</strong> → <strong>Site details</strong></li>
+                                    <li>Copy the <strong>Website ID</strong></li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <button type="button" id="fetchWebsitesBtn" class="btn-outline" style="margin-bottom: 1rem;">
+                            Fetch Websites from Environment
+                        </button>
+                    </div>
+
+                    <!-- New Site Section -->
+                    <div class="form-section" id="newSiteSection" style="display: none;">
+                        <h3>New Site Details</h3>
+                        
+                        <div class="form-group">
+                            <label for="newSiteName">Site Name</label>
+                            <input type="text" id="newSiteName" name="newSiteName" placeholder="My Company Portal" value="{{wizardData.themeName}}">
+                        </div>
+
+                        <div class="alert alert-info">
+                            <p><strong>Note:</strong> Creating a Power Pages site requires access to Power Platform Admin Center. We'll provide step-by-step instructions in the next step.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="/deploy" class="btn-outline">Back</a>
+                        <button type="submit" class="btn-primary">Continue to Confirmation</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Toggle between existing and new site
+document.querySelectorAll('input[name="deploymentTarget"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        document.getElementById('existingSiteSection').style.display = this.value === 'existing' ? 'block' : 'none';
+        document.getElementById('newSiteSection').style.display = this.value === 'new' ? 'block' : 'none';
+    });
+});
+
+// Handle saved environment selection
+document.getElementById('savedEnvironment')?.addEventListener('change', function() {
+    const customGroup = document.getElementById('customEnvGroup');
+    const envInput = document.getElementById('environmentUrl');
+    if (this.value === 'custom') {
+        customGroup.style.display = 'block';
+        envInput.value = '';
+    } else if (this.value) {
+        customGroup.style.display = 'none';
+        envInput.value = this.value;
+    }
+});
+
+// Fetch websites button
+document.getElementById('fetchWebsitesBtn')?.addEventListener('click', async function() {
+    const envUrl = document.getElementById('environmentUrl').value || document.getElementById('savedEnvironment')?.value;
+    if (!envUrl || envUrl === 'custom') {
+        alert('Please enter or select an environment URL first');
+        return;
+    }
+
+    this.disabled = true;
+    this.textContent = 'Fetching...';
+
+    try {
+        const response = await fetch('/deploy/api/fetch-websites', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'CSRF-Token': document.querySelector('[name="_csrf"]').value
+            },
+            body: JSON.stringify({ environmentUrl: envUrl })
+        });
+        const data = await response.json();
+
+        if (data.websites && data.websites.length > 0) {
+            const select = document.getElementById('websiteSelect');
+            select.innerHTML = '<option value="">-- Select Website --</option>';
+            data.websites.forEach(site => {
+                select.innerHTML += `<option value="${site.powerpagesiteid}">${site.name}</option>`;
+            });
+            document.getElementById('websitesList').style.display = 'block';
+            document.getElementById('websiteIdManual').style.display = 'none';
+        } else {
+            alert('No websites found in this environment. You may need to create one first.');
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+        alert('Failed to fetch websites. Please enter the Website ID manually.');
+    }
+
+    this.disabled = false;
+    this.textContent = 'Fetch Websites from Environment';
+});
+</script>

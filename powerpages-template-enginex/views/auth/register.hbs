@@ -1,0 +1,114 @@
+<section class="auth-section">
+    <div class="container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>Create Account</h1>
+                <p>Get started with PowerPages Template Engine</p>
+            </div>
+
+            {{#if errors}}
+            <div class="alert alert-error">
+                <ul>
+                    {{#each errors}}
+                    <li>{{this.msg}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+            {{/if}}
+
+            <form action="/auth/register" method="POST" class="auth-form">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input 
+                        type="text" 
+                        id="fullName" 
+                        name="fullName" 
+                        value="{{fullName}}"
+                        placeholder="John Doe" 
+                        required
+                        autocomplete="name"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Work Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        value="{{email}}"
+                        placeholder="you@company.com" 
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="••••••••" 
+                        required
+                        minlength="8"
+                        autocomplete="new-password"
+                    >
+                    <span class="form-hint">Min 8 characters, one uppercase, one number</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        name="confirmPassword" 
+                        placeholder="••••••••" 
+                        required
+                        autocomplete="new-password"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="organization">Organization (optional)</label>
+                    <input 
+                        type="text" 
+                        id="organization" 
+                        name="organization" 
+                        value="{{organization}}"
+                        placeholder="Your Company"
+                        autocomplete="organization"
+                    >
+                </div>
+
+                <button type="submit" class="btn-primary btn-block">Create Account</button>
+            </form>
+
+            <div class="form-divider">
+                <span>or continue with</span>
+            </div>
+
+            <a href="/auth/microsoft" class="btn-microsoft">
+                <svg width="20" height="20" viewBox="0 0 21 21">
+                    <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+                    <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+                    <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+                    <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+                </svg>
+                Sign up with Microsoft
+            </a>
+
+            <p class="auth-terms">
+                By creating an account, you agree to our 
+                <a href="/terms">Terms of Service</a> and 
+                <a href="/privacy">Privacy Policy</a>.
+            </p>
+
+            <p class="auth-footer">
+                Already have an account? <a href="/auth/login">Sign in</a>
+            </p>
+        </div>
+    </div>
+</section>

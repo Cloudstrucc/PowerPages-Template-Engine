@@ -1,0 +1,71 @@
+<section class="themes-section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-badge">Free Themes</span>
+            <h1>Theme Gallery</h1>
+            <p>Choose from our curated collection of free, open-source Bootstrap themes. One-click install to your Power Pages environment.</p>
+        </div>
+
+        <div class="themes-filter">
+            {{#each categories}}
+            <a href="/themes?category={{this}}" class="filter-btn {{#if (eq this ../currentCategory)}}active{{/if}}">
+                {{capitalize this}}
+            </a>
+            {{/each}}
+        </div>
+
+        <div class="themes-grid">
+            {{#each themes}}
+            <div class="theme-card" data-category="{{this.category}}">
+                <div class="theme-preview">
+                    <img src="{{this.previewImage}}" alt="{{this.name}} Theme" loading="lazy">
+                    <div class="theme-overlay">
+                        <a href="{{this.demoUrl}}" target="_blank" class="btn-preview">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            Preview
+                        </a>
+                        <a href="/themes/{{this.id}}/install" class="btn-install">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Install
+                        </a>
+                    </div>
+                </div>
+                <div class="theme-info">
+                    <h3>{{this.name}}</h3>
+                    <p>{{this.description}}</p>
+                    <div class="theme-meta">
+                        <span class="theme-tag">Bootstrap {{this.bootstrapVersion}}</span>
+                        <span class="theme-category">{{capitalize this.category}}</span>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+
+        {{#unless themes.length}}
+        <div class="empty-state">
+            <p>No themes found in this category.</p>
+            <a href="/themes" class="btn-primary">View All Themes</a>
+        </div>
+        {{/unless}}
+
+        <div class="themes-cta">
+            <p>Have your own Bootstrap theme?</p>
+            <a href="/upload" class="btn-secondary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                Upload Custom Theme
+            </a>
+        </div>
+    </div>
+</section>

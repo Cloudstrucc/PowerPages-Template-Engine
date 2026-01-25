@@ -1,0 +1,98 @@
+<div class="admin-stats">
+    <div class="admin-stat-card">
+        <h3>Total Users</h3>
+        <div class="value">{{stats.userCount}}</div>
+    </div>
+    <div class="admin-stat-card">
+        <h3>Deployed Themes</h3>
+        <div class="value">{{stats.themeCount}}</div>
+    </div>
+    <div class="admin-stat-card">
+        <h3>Gallery Themes</h3>
+        <div class="value">{{stats.galleryThemeCount}}</div>
+    </div>
+    <div class="admin-stat-card">
+        <h3>Organizations</h3>
+        <div class="value">{{stats.organizationCount}}</div>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2>Recent Users</h2>
+        <a href="/admin/users" class="admin-btn admin-btn-secondary admin-btn-sm">View All</a>
+    </div>
+    <div class="admin-card-body">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Joined</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each recentUsers}}
+                <tr>
+                    <td>{{this.email}}</td>
+                    <td>{{this.displayName}}</td>
+                    <td>{{formatDate this.createdAt 'short'}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2>Recent Deployments</h2>
+        <a href="/admin/users" class="admin-btn admin-btn-secondary admin-btn-sm">View All</a>
+    </div>
+    <div class="admin-card-body">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Theme</th>
+                    <th>User</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each recentThemes}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.user.email}}</td>
+                    <td>
+                        <span class="admin-badge {{statusBadge this.deployment.status}}">
+                            {{this.deployment.status}}
+                        </span>
+                    </td>
+                    <td>{{formatDate this.createdAt 'short'}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{{#if isSuperAdmin}}
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2>Quick Actions</h2>
+    </div>
+    <div class="admin-card-body">
+        <div class="admin-actions">
+            <form action="/admin/gallery-themes/seed-defaults" method="POST" style="display: inline;">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <button type="submit" class="admin-btn admin-btn-secondary">Seed Default Themes</button>
+            </form>
+            <form action="/admin/config/initialize-defaults" method="POST" style="display: inline;">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <button type="submit" class="admin-btn admin-btn-secondary">Initialize Config Defaults</button>
+            </form>
+        </div>
+    </div>
+</div>
+{{/if}}

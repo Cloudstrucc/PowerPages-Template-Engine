@@ -1,0 +1,70 @@
+<section class="auth-section">
+    <div class="container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>Welcome Back</h1>
+                <p>Sign in to your account to continue</p>
+            </div>
+
+            {{#if errors}}
+            <div class="alert alert-error">
+                <ul>
+                    {{#each errors}}
+                    <li>{{this.msg}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+            {{/if}}
+
+            <form action="/auth/login" method="POST" class="auth-form">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        value="{{email}}"
+                        placeholder="you@company.com" 
+                        required 
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="••••••••" 
+                        required
+                        autocomplete="current-password"
+                    >
+                    <a href="/auth/forgot-password" class="forgot-link">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn-primary btn-block">Sign In</button>
+            </form>
+
+            <div class="form-divider">
+                <span>or continue with</span>
+            </div>
+
+            <a href="/auth/microsoft" class="btn-microsoft">
+                <svg width="20" height="20" viewBox="0 0 21 21">
+                    <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+                    <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+                    <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+                    <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+                </svg>
+                Sign in with Microsoft
+            </a>
+
+            <p class="auth-footer">
+                Don't have an account? <a href="/auth/register">Sign up</a>
+            </p>
+        </div>
+    </div>
+</section>

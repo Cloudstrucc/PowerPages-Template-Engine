@@ -1,0 +1,16 @@
+<section class="error-section">
+    <div class="container">
+        <div class="error-content">
+            <h1 class="error-code">500</h1>
+            <h2>Something Went Wrong</h2>
+            <p>{{message}}</p>
+            {{#if error.stack}}
+            <pre class="error-stack">{{error.stack}}</pre>
+            {{/if}}
+            <div class="error-actions">
+                <a href="/" class="btn-primary">Go Home</a>
+                <a href="javascript:location.reload()" class="btn-outline">Try Again</a>
+            </div>
+        </div>
+    </div>
+</section>
