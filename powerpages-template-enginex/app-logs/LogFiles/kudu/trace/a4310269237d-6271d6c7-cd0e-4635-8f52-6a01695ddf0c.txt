@@ -1,0 +1,7 @@
+2026-02-23T18:02:26  Startup Request, url: /api/publish?type=zip, method: POST, type: request, pid: 839,1,5, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None
+2026-02-23T18:20:17                    Error occurred, type: error, text: Unable to retrieve the specified information about the process or thread.  It may have exited or may be privileged., stackTrace:    at System.Diagnostics.Process.GetStat()
+   at System.Diagnostics.Process.get_TotalProcessorTime()
+   at Kudu.Core.Infrastructure.ProcessExtensions.<>c.<GetTotalProcessorTime>b__7_0(Process p) in /tmp/KuduLite/Kudu.Core/Infrastructure/ProcessExtensions.cs:line 95
+   at System.Linq.Utilities.<>c__DisplayClass2_0`3.<CombineSelectors>b__0(TSource x)
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.ToArray()
+   at Kudu.Core.Infrastructure.ProcessExtensions.GetTotalProcessorTime(Process process, ITracer tracer) in /tmp/KuduLite/Kudu.Core/Infrastructure/ProcessExtensions.cs:line 97

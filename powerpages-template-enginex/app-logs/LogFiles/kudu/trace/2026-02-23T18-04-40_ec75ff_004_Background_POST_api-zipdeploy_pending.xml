@@ -1,0 +1,135 @@
+<step title="BackgroundTrace" date="2026-02-23T18:04:40.761" instance="ec75ff" url="/api/zipdeploy" method="POST" >
+  <step title="Creating temporary deployment - FetchDeploymentManager" date="2026-02-23T18:04:41.016" /><!-- duration: 3ms -->
+  <step title="Creating temporary deployment" date="2026-02-23T18:04:41.065" /><!-- duration: 430ms -->
+  <step title="Performing fetch based deployment" date="2026-02-23T18:04:42.293" >
+    <step title="Cleaning up temp folders from previous zip deployments and extracting pushed zip file /tmp/zipdeploy/99c95a2c-fb47-41f0-b8a9-fc603b6f5060.zip (0.16 MB) to /tmp/zipdeploy/extracted" date="2026-02-23T18:04:43.891" >
+      <step title="ChmodRecursive Process exited with total time taken in ms: 168" date="2026-02-23T18:04:44.607" /><!-- duration: 11ms -->
+    </step><!-- duration: 755ms -->
+    <step title="Deployment timer started" date="2026-02-23T18:04:46.797" >
+      <step title="DeploymentManager.Deploy(id:fce3c0ba-8f98-4dfe-825a-970a46526536)" date="2026-02-23T18:04:46.866" >
+        <step title="Collecting changeset information" date="2026-02-23T18:04:47.141" /><!-- duration: 421ms -->
+        <step title="Updating submodules" date="2026-02-23T18:04:47.592" /><!-- duration: 1426ms -->
+        <step title="Determining deployment builder" date="2026-02-23T18:04:49.576" >
+          <step title="Builder is OryxBuilder" date="2026-02-23T18:04:49.744" /><!-- duration: 18ms -->
+        </step><!-- duration: 195ms -->
+        <step title="PreDeployment: context.CleanOutputPath False" date="2026-02-23T18:04:49.882" >
+          <step title="PreDeployment: context.OutputPath /home/site/wwwroot" date="2026-02-23T18:04:50.585" >
+            <step title="Building" date="2026-02-23T18:04:51.052" >
+              <step title="Executing external process" date="2026-02-23T18:04:52.339" type="process" path="bash" arguments="-c &quot;oryx build /tmp/zipdeploy/extracted -o /home/site/wwwroot --platform nodejs --platform-version 20 -p virtualenv_name= --log-file /tmp/build-debug.log  -i /tmp/8de7306096585fe -p compress_node_modules=tar-gz | tee /tmp/oryx-build.log ; exit $PIPESTATUS &quot;" >
+                <step title="Cpu: npm install(1164,2.610s)+build.sh(1072,0.110s)+oryx(1027,14.270s)+tee(1028,0.010s)+bash(1026,0.010s)=total(16.990s)" date="2026-02-23T18:08:00.698" /><!-- duration: 170ms -->
+                <step title="bash: no io activity for 60s, prev-cpu=-1.000s, current-cpu=16.990s" date="2026-02-23T18:08:00.914" /><!-- duration: 27ms -->
+                <step title="Cpu: npm install(1164,3.970s)+build.sh(1072,0.110s)+oryx(1027,15.360s)+tee(1028,0.010s)+bash(1026,0.010s)=total(19.440s)" date="2026-02-23T18:09:03.139" /><!-- duration: 39ms -->
+                <step title="bash: no io activity for 127s, prev-cpu=16.990s, current-cpu=19.440s" date="2026-02-23T18:09:03.300" /><!-- duration: 19ms -->
+                <step title="Cpu: npm install(1164,15.590s)+build.sh(1072,0.110s)+oryx(1027,15.890s)+tee(1028,0.010s)+bash(1026,0.010s)=total(31.600s)" date="2026-02-23T18:10:04.744" /><!-- duration: 12ms -->
+                <step title="bash: no io activity for 189s, prev-cpu=19.440s, current-cpu=31.600s" date="2026-02-23T18:10:04.775" /><!-- duration: 31ms -->
+                <step title="Cpu: node-gyp(1277,5.870s)+sh(1276,0.010s)+sh(1275,0.020s)+npm install(1164,33.980s)+build.sh(1072,0.110s)+oryx(1027,16.240s)+tee(1028,0.010s)+bash(1026,0.010s)=total(56.240s)" date="2026-02-23T18:11:31.978" /><!-- duration: 51ms -->
+                <step title="bash: no io activity for 60s, prev-cpu=-1.000s, current-cpu=56.240s" date="2026-02-23T18:11:32.068" /><!-- duration: 41ms -->
+                <step title="Cpu: node-gyp(1277,8.340s)+sh(1276,0.010s)+sh(1275,0.020s)+npm install(1164,34.240s)+build.sh(1072,0.110s)+oryx(1027,16.310s)+tee(1028,0.010s)+bash(1026,0.010s)=total(59.040s)" date="2026-02-23T18:12:35.901" /><!-- duration: 593ms -->
+                <step title="bash: no io activity for 122s, prev-cpu=56.240s, current-cpu=59.040s" date="2026-02-23T18:12:36.635" /><!-- duration: 179ms -->
+                <step title="Cpu: node-gyp(1277,9.920s)+sh(1276,0.010s)+sh(1275,0.020s)+npm install(1164,34.290s)+build.sh(1072,0.110s)+oryx(1027,16.420s)+tee(1028,0.010s)+bash(1026,0.010s)=total(60.780s)" date="2026-02-23T18:13:39.340" /><!-- duration: 80ms -->
+                <step title="bash: no io activity for 186s, prev-cpu=59.040s, current-cpu=60.780s" date="2026-02-23T18:13:39.463" /><!-- duration: 38ms -->
+                <step title="Cpu: node-gyp(1277,11.790s)+sh(1276,0.010s)+sh(1275,0.020s)+npm install(1164,34.860s)+build.sh(1072,0.110s)+oryx(1027,16.580s)+tee(1028,0.010s)+bash(1026,0.010s)=total(63.340s)" date="2026-02-23T18:14:43.488" /><!-- duration: 276ms -->
+                <step title="bash: no io activity for 249s, prev-cpu=60.780s, current-cpu=63.340s" date="2026-02-23T18:14:44.225" /><!-- duration: 664ms -->
+                <step title="Cpu: node-gyp(1277,15.150s)+sh(1276,0.010s)+sh(1275,0.020s)+npm install(1164,34.860s)+build.sh(1072,0.110s)+oryx(1027,16.700s)+tee(1028,0.010s)+bash(1026,0.010s)=total(66.850s)" date="2026-02-23T18:15:46.045" /><!-- duration: 3ms -->
+                <step title="bash: no io activity for 314s, prev-cpu=63.340s, current-cpu=66.850s" date="2026-02-23T18:15:46.148" /><!-- duration: 87ms -->
+                <step title="Cpu: node-gyp(1277,18.160s)+sh(1276,0.010s)+sh(1275,0.020s)+npm install(1164,34.920s)+build.sh(1072,0.110s)+oryx(1027,16.730s)+tee(1028,0.010s)+bash(1026,0.010s)=total(69.970s)" date="2026-02-23T18:16:47.681" /><!-- duration: 128ms -->
+                <step title="bash: no io activity for 376s, prev-cpu=66.850s, current-cpu=69.970s" date="2026-02-23T18:16:47.862" /><!-- duration: 69ms -->
+                <step title="Cpu: node-gyp(1277,21.100s)+sh(1276,0.010s)+sh(1275,0.020s)+npm install(1164,34.920s)+build.sh(1072,0.110s)+oryx(1027,16.780s)+tee(1028,0.010s)+bash(1026,0.010s)=total(72.950s)" date="2026-02-23T18:17:56.553" /><!-- duration: 118ms -->
+                <step title="bash: no io activity for 437s, prev-cpu=69.970s, current-cpu=72.950s" date="2026-02-23T18:17:57.083" /><!-- duration: 635ms -->
+                <step title="Cpu: node-gyp(1277,22.350s)+sh(1276,0.010s)+sh(1275,0.020s)+npm install(1164,34.920s)+build.sh(1072,0.110s)+oryx(1027,16.820s)+tee(1028,0.010s)+bash(1026,0.010s)=total(74.240s)" date="2026-02-23T18:19:04.442" /><!-- duration: 216ms -->
+                <step title="bash: no io activity for 509s, prev-cpu=72.950s, current-cpu=74.240s" date="2026-02-23T18:19:05.273" /><!-- duration: 290ms -->
+                <step title="Cpu: node-gyp(1277,24.390s)+sh(1276,0.010s)+sh(1275,0.020s)+npm install(1164,34.920s)+build.sh(1072,0.110s)+oryx(1027,16.840s)+tee(1028,0.010s)+bash(1026,0.010s)=total(76.290s)" date="2026-02-23T18:20:14.121" /><!-- duration: 83ms -->
+                <step title="bash: no io activity for 575s, prev-cpu=74.240s, current-cpu=76.290s" date="2026-02-23T18:20:14.896" /><!-- duration: 130ms -->
+                <step title="Process dump" date="2026-02-23T18:21:11.185" exitCode="1" type="processOutput" /><!-- duration: 41ms -->
+              </step><!-- duration: 978938ms -->
+              <step title="Error occurred" date="2026-02-23T18:21:11.744" type="error" text="npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm warn deprecated rimraf@2.4.5: Rimraf versions prior to v4 are no longer supported
+npm warn deprecated csurf@1.11.0: This package is archived and no longer maintained. For support, visit https://github.com/expressjs/express/discussions
+npm warn deprecated glob@6.0.4: Glob versions prior to v9 are no longer supported
+npm warn deprecated multer@1.4.5-lts.2: Multer 1.x is impacted by a number of vulnerabilities, which have been patched in 2.x. You should upgrade to the latest 2.x version.
+npm warn deprecated passport-azure-ad@4.3.5: This package is deprecated and no longer supported. For more please visit https://github.com/AzureAD/passport-azure-ad?tab=readme-ov-file#node-js-validation-replacement-for-passportjs
+rm: cannot remove &apos;/tmp/zipdeploy/extracted/oryx-build-commands.txt&apos;: No such file or directory
+/bin/bash -c &quot;oryx build /tmp/zipdeploy/extracted -o /home/site/wwwroot --platform nodejs --platform-version 20 -p virtualenv_name= --log-file /tmp/build-debug.log  -i /tmp/8de7306096585fe -p compress_node_modules=tar-gz | tee /tmp/oryx-build.log ; exit $PIPESTATUS &quot;" stackTrace="   at Kudu.Core.Infrastructure.Executable.ExecuteInternal(ITracer tracer, Func`2 onWriteOutput, Func`2 onWriteError, CancellationToken token, Encoding encoding, String arguments, Object[] args) in /tmp/KuduLite/Kudu.Core/Infrastructure/Executable.cs:line 239
+   at Kudu.Core.Infrastructure.Executable.ExecuteWithProgressWriter(ILogger logger, ITracer tracer, CancellationToken token, String arguments, Object[] args) in /tmp/KuduLite/Kudu.Core/Infrastructure/Executable.cs:line 118
+   at Kudu.Core.Deployment.Generator.ExternalCommandBuilder.RunCommand(DeploymentContext context, String command, Boolean ignoreManifest, CancellationToken token, String message) in /tmp/KuduLite/Kudu.Core/Deployment/Generator/ExternalCommandBuilder.cs:line 135" /><!-- duration: 71ms -->
+              <step title="Error occurred" date="2026-02-23T18:21:12.111" type="error" text="npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm warn deprecated rimraf@2.4.5: Rimraf versions prior to v4 are no longer supported
+npm warn deprecated csurf@1.11.0: This package is archived and no longer maintained. For support, visit https://github.com/expressjs/express/discussions
+npm warn deprecated glob@6.0.4: Glob versions prior to v9 are no longer supported
+npm warn deprecated multer@1.4.5-lts.2: Multer 1.x is impacted by a number of vulnerabilities, which have been patched in 2.x. You should upgrade to the latest 2.x version.
+npm warn deprecated passport-azure-ad@4.3.5: This package is deprecated and no longer supported. For more please visit https://github.com/AzureAD/passport-azure-ad?tab=readme-ov-file#node-js-validation-replacement-for-passportjs
+rm: cannot remove &apos;/tmp/zipdeploy/extracted/oryx-build-commands.txt&apos;: No such file or directory
+/bin/bash -c &quot;oryx build /tmp/zipdeploy/extracted -o /home/site/wwwroot --platform nodejs --platform-version 20 -p virtualenv_name= --log-file /tmp/build-debug.log  -i /tmp/8de7306096585fe -p compress_node_modules=tar-gz | tee /tmp/oryx-build.log ; exit $PIPESTATUS &quot;" stackTrace="   at Kudu.Core.Infrastructure.Executable.ExecuteInternal(ITracer tracer, Func`2 onWriteOutput, Func`2 onWriteError, CancellationToken token, Encoding encoding, String arguments, Object[] args) in /tmp/KuduLite/Kudu.Core/Infrastructure/Executable.cs:line 239
+   at Kudu.Core.Infrastructure.Executable.ExecuteWithProgressWriter(ILogger logger, ITracer tracer, CancellationToken token, String arguments, Object[] args) in /tmp/KuduLite/Kudu.Core/Infrastructure/Executable.cs:line 118
+   at Kudu.Core.Deployment.Generator.ExternalCommandBuilder.RunCommand(DeploymentContext context, String command, Boolean ignoreManifest, CancellationToken token, String message) in /tmp/KuduLite/Kudu.Core/Deployment/Generator/ExternalCommandBuilder.cs:line 135
+   at Kudu.Core.Deployment.Generator.OryxBuilder.RunBuildCommand(IOryxArguments args, DeploymentContext context, CancellationToken token) in /tmp/KuduLite/Kudu.Core/Deployment/Generator/OryxBuilder.cs:line 295
+   at Kudu.Core.Deployment.Generator.OryxBuilder.Build(DeploymentContext context, CancellationToken token) in /tmp/KuduLite/Kudu.Core/Deployment/Generator/OryxBuilder.cs:line 136
+   at Kudu.Core.Deployment.DeploymentManager.Build(ChangeSet changeSet, ITracer tracer, IDisposable deployStep, IRepository repository, DeploymentInfoBase deploymentInfo, DeploymentAnalytics deploymentAnalytics, Boolean fullBuildByDefault, CancellationToken cancellationToken) in /tmp/KuduLite/Kudu.Core/Deployment/DeploymentManager.cs:line 771" /><!-- duration: 30ms -->
+              <step title="Using GenericDeploymentLogParser" date="2026-02-23T18:21:13.590" /><!-- duration: 29ms -->
+              <step title="Purge deployment items" date="2026-02-23T18:21:19.389" >
+                <step title="Remove temp-b826, Pending, received at 02/23/2026 18:04:41" date="2026-02-23T18:21:19.584" /><!-- duration: 12ms -->
+                <step title="Remove temp-50e3, Pending, received at 02/23/2026 18:02:35" date="2026-02-23T18:21:19.726" /><!-- duration: 11ms -->
+              </step><!-- duration: 394ms -->
+            </step><!-- duration: 988745ms -->
+          </step><!-- duration: 989271ms -->
+          <step title="Error occurred" date="2026-02-23T18:21:19.886" type="error" text="npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm warn deprecated rimraf@2.4.5: Rimraf versions prior to v4 are no longer supported
+npm warn deprecated csurf@1.11.0: This package is archived and no longer maintained. For support, visit https://github.com/expressjs/express/discussions
+npm warn deprecated glob@6.0.4: Glob versions prior to v9 are no longer supported
+npm warn deprecated multer@1.4.5-lts.2: Multer 1.x is impacted by a number of vulnerabilities, which have been patched in 2.x. You should upgrade to the latest 2.x version.
+npm warn deprecated passport-azure-ad@4.3.5: This package is deprecated and no longer supported. For more please visit https://github.com/AzureAD/passport-azure-ad?tab=readme-ov-file#node-js-validation-replacement-for-passportjs
+rm: cannot remove &apos;/tmp/zipdeploy/extracted/oryx-build-commands.txt&apos;: No such file or directory
+/bin/bash -c &quot;oryx build /tmp/zipdeploy/extracted -o /home/site/wwwroot --platform nodejs --platform-version 20 -p virtualenv_name= --log-file /tmp/build-debug.log  -i /tmp/8de7306096585fe -p compress_node_modules=tar-gz | tee /tmp/oryx-build.log ; exit $PIPESTATUS &quot;" stackTrace="   at Kudu.Core.Infrastructure.Executable.ExecuteInternal(ITracer tracer, Func`2 onWriteOutput, Func`2 onWriteError, CancellationToken token, Encoding encoding, String arguments, Object[] args) in /tmp/KuduLite/Kudu.Core/Infrastructure/Executable.cs:line 239
+   at Kudu.Core.Infrastructure.Executable.ExecuteWithProgressWriter(ILogger logger, ITracer tracer, CancellationToken token, String arguments, Object[] args) in /tmp/KuduLite/Kudu.Core/Infrastructure/Executable.cs:line 118
+   at Kudu.Core.Deployment.Generator.ExternalCommandBuilder.RunCommand(DeploymentContext context, String command, Boolean ignoreManifest, CancellationToken token, String message) in /tmp/KuduLite/Kudu.Core/Deployment/Generator/ExternalCommandBuilder.cs:line 135
+   at Kudu.Core.Deployment.Generator.OryxBuilder.RunBuildCommand(IOryxArguments args, DeploymentContext context, CancellationToken token) in /tmp/KuduLite/Kudu.Core/Deployment/Generator/OryxBuilder.cs:line 295
+   at Kudu.Core.Deployment.Generator.OryxBuilder.Build(DeploymentContext context, CancellationToken token) in /tmp/KuduLite/Kudu.Core/Deployment/Generator/OryxBuilder.cs:line 136
+   at Kudu.Core.Deployment.DeploymentManager.Build(ChangeSet changeSet, ITracer tracer, IDisposable deployStep, IRepository repository, DeploymentInfoBase deploymentInfo, DeploymentAnalytics deploymentAnalytics, Boolean fullBuildByDefault, CancellationToken cancellationToken) in /tmp/KuduLite/Kudu.Core/Deployment/DeploymentManager.cs:line 771
+   at Kudu.Core.Deployment.DeploymentManager.Build(ChangeSet changeSet, ITracer tracer, IDisposable deployStep, IRepository repository, DeploymentInfoBase deploymentInfo, DeploymentAnalytics deploymentAnalytics, Boolean fullBuildByDefault, CancellationToken cancellationToken) in /tmp/KuduLite/Kudu.Core/Deployment/DeploymentManager.cs:line 840" /><!-- duration: 56ms -->
+          <step title="Cleaning up temp files" date="2026-02-23T18:21:20.124" /><!-- duration: 14222ms -->
+          <step title="Cleaning up temp files" date="2026-02-23T18:21:34.368" /><!-- duration: 621ms -->
+          <step title="Error occurred" date="2026-02-23T18:21:35.145" type="error" text="npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm warn deprecated rimraf@2.4.5: Rimraf versions prior to v4 are no longer supported
+npm warn deprecated csurf@1.11.0: This package is archived and no longer maintained. For support, visit https://github.com/expressjs/express/discussions
+npm warn deprecated glob@6.0.4: Glob versions prior to v9 are no longer supported
+npm warn deprecated multer@1.4.5-lts.2: Multer 1.x is impacted by a number of vulnerabilities, which have been patched in 2.x. You should upgrade to the latest 2.x version.
+npm warn deprecated passport-azure-ad@4.3.5: This package is deprecated and no longer supported. For more please visit https://github.com/AzureAD/passport-azure-ad?tab=readme-ov-file#node-js-validation-replacement-for-passportjs
+rm: cannot remove &apos;/tmp/zipdeploy/extracted/oryx-build-commands.txt&apos;: No such file or directory
+/bin/bash -c &quot;oryx build /tmp/zipdeploy/extracted -o /home/site/wwwroot --platform nodejs --platform-version 20 -p virtualenv_name= --log-file /tmp/build-debug.log  -i /tmp/8de7306096585fe -p compress_node_modules=tar-gz | tee /tmp/oryx-build.log ; exit $PIPESTATUS &quot;" stackTrace="   at Kudu.Core.Infrastructure.Executable.ExecuteInternal(ITracer tracer, Func`2 onWriteOutput, Func`2 onWriteError, CancellationToken token, Encoding encoding, String arguments, Object[] args) in /tmp/KuduLite/Kudu.Core/Infrastructure/Executable.cs:line 239
+   at Kudu.Core.Infrastructure.Executable.ExecuteWithProgressWriter(ILogger logger, ITracer tracer, CancellationToken token, String arguments, Object[] args) in /tmp/KuduLite/Kudu.Core/Infrastructure/Executable.cs:line 118
+   at Kudu.Core.Deployment.Generator.ExternalCommandBuilder.RunCommand(DeploymentContext context, String command, Boolean ignoreManifest, CancellationToken token, String message) in /tmp/KuduLite/Kudu.Core/Deployment/Generator/ExternalCommandBuilder.cs:line 135
+   at Kudu.Core.Deployment.Generator.OryxBuilder.RunBuildCommand(IOryxArguments args, DeploymentContext context, CancellationToken token) in /tmp/KuduLite/Kudu.Core/Deployment/Generator/OryxBuilder.cs:line 295
+   at Kudu.Core.Deployment.Generator.OryxBuilder.Build(DeploymentContext context, CancellationToken token) in /tmp/KuduLite/Kudu.Core/Deployment/Generator/OryxBuilder.cs:line 136
+   at Kudu.Core.Deployment.DeploymentManager.Build(ChangeSet changeSet, ITracer tracer, IDisposable deployStep, IRepository repository, DeploymentInfoBase deploymentInfo, DeploymentAnalytics deploymentAnalytics, Boolean fullBuildByDefault, CancellationToken cancellationToken) in /tmp/KuduLite/Kudu.Core/Deployment/DeploymentManager.cs:line 771
+   at Kudu.Core.Deployment.DeploymentManager.Build(ChangeSet changeSet, ITracer tracer, IDisposable deployStep, IRepository repository, DeploymentInfoBase deploymentInfo, DeploymentAnalytics deploymentAnalytics, Boolean fullBuildByDefault, CancellationToken cancellationToken) in /tmp/KuduLite/Kudu.Core/Deployment/DeploymentManager.cs:line 840
+   at Kudu.Core.Deployment.DeploymentManager.DeployAsync(IRepository repository, ChangeSet changeSet, String deployer, Boolean clean, DeploymentInfoBase deploymentInfo, Boolean needFileUpdate, Boolean fullBuildByDefault) in /tmp/KuduLite/Kudu.Core/Deployment/DeploymentManager.cs:line 266" /><!-- duration: 21ms -->
+        </step><!-- duration: 1005296ms -->
+        <step title="Reloading status file with latest updates" date="2026-02-23T18:21:35.337" >
+          <step title="WebHooksManager.PublishEventAsync: PostDeployment" date="2026-02-23T18:21:35.396" /><!-- duration: 446ms -->
+        </step><!-- duration: 525ms -->
+        <step title="Error occurred" date="2026-02-23T18:21:35.874" type="error" text="npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm warn deprecated rimraf@2.4.5: Rimraf versions prior to v4 are no longer supported
+npm warn deprecated csurf@1.11.0: This package is archived and no longer maintained. For support, visit https://github.com/expressjs/express/discussions
+npm warn deprecated glob@6.0.4: Glob versions prior to v9 are no longer supported
+npm warn deprecated multer@1.4.5-lts.2: Multer 1.x is impacted by a number of vulnerabilities, which have been patched in 2.x. You should upgrade to the latest 2.x version.
+npm warn deprecated passport-azure-ad@4.3.5: This package is deprecated and no longer supported. For more please visit https://github.com/AzureAD/passport-azure-ad?tab=readme-ov-file#node-js-validation-replacement-for-passportjs
+rm: cannot remove &apos;/tmp/zipdeploy/extracted/oryx-build-commands.txt&apos;: No such file or directory
+/bin/bash -c &quot;oryx build /tmp/zipdeploy/extracted -o /home/site/wwwroot --platform nodejs --platform-version 20 -p virtualenv_name= --log-file /tmp/build-debug.log  -i /tmp/8de7306096585fe -p compress_node_modules=tar-gz | tee /tmp/oryx-build.log ; exit $PIPESTATUS &quot;" stackTrace="   at Kudu.Core.Infrastructure.Executable.ExecuteInternal(ITracer tracer, Func`2 onWriteOutput, Func`2 onWriteError, CancellationToken token, Encoding encoding, String arguments, Object[] args) in /tmp/KuduLite/Kudu.Core/Infrastructure/Executable.cs:line 239
+   at Kudu.Core.Infrastructure.Executable.ExecuteWithProgressWriter(ILogger logger, ITracer tracer, CancellationToken token, String arguments, Object[] args) in /tmp/KuduLite/Kudu.Core/Infrastructure/Executable.cs:line 118
+   at Kudu.Core.Deployment.Generator.ExternalCommandBuilder.RunCommand(DeploymentContext context, String command, Boolean ignoreManifest, CancellationToken token, String message) in /tmp/KuduLite/Kudu.Core/Deployment/Generator/ExternalCommandBuilder.cs:line 135
+   at Kudu.Core.Deployment.Generator.OryxBuilder.RunBuildCommand(IOryxArguments args, DeploymentContext context, CancellationToken token) in /tmp/KuduLite/Kudu.Core/Deployment/Generator/OryxBuilder.cs:line 295
+   at Kudu.Core.Deployment.Generator.OryxBuilder.Build(DeploymentContext context, CancellationToken token) in /tmp/KuduLite/Kudu.Core/Deployment/Generator/OryxBuilder.cs:line 136
+   at Kudu.Core.Deployment.DeploymentManager.Build(ChangeSet changeSet, ITracer tracer, IDisposable deployStep, IRepository repository, DeploymentInfoBase deploymentInfo, DeploymentAnalytics deploymentAnalytics, Boolean fullBuildByDefault, CancellationToken cancellationToken) in /tmp/KuduLite/Kudu.Core/Deployment/DeploymentManager.cs:line 771
+   at Kudu.Core.Deployment.DeploymentManager.Build(ChangeSet changeSet, ITracer tracer, IDisposable deployStep, IRepository repository, DeploymentInfoBase deploymentInfo, DeploymentAnalytics deploymentAnalytics, Boolean fullBuildByDefault, CancellationToken cancellationToken) in /tmp/KuduLite/Kudu.Core/Deployment/DeploymentManager.cs:line 840
+   at Kudu.Core.Deployment.DeploymentManager.DeployAsync(IRepository repository, ChangeSet changeSet, String deployer, Boolean clean, DeploymentInfoBase deploymentInfo, Boolean needFileUpdate, Boolean fullBuildByDefault) in /tmp/KuduLite/Kudu.Core/Deployment/DeploymentManager.cs:line 266" /><!-- duration: 30ms -->
+        <step title="Could not find status file to mark the deployment failed" date="2026-02-23T18:21:36.035" /><!-- duration: 38ms -->
+      </step><!-- duration: 1009247ms -->
+      <step title="Error occurred" date="2026-02-23T18:21:36.404" type="error" text="One or more errors occurred. (Deployment failed)" stackTrace="   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task.Wait()
+   at Kudu.Core.Deployment.FetchDeploymentManager.&lt;&gt;c__DisplayClass22_1.&lt;PerformBackgroundDeployment&gt;b__3() in /tmp/KuduLite/Kudu.Core/Deployment/FetchDeploymentManager.cs:line 414
+   at Kudu.Contracts.Infrastructure.LockExtensions.TryLockOperation(IOperationLock lockObj, Action operation, String operationName, TimeSpan timeout) in /tmp/KuduLite/Kudu.Contracts/Infrastructure/LockExtensions.cs:line 34
+   at Kudu.Contracts.Infrastructure.LockExtensions.LockOperation(IOperationLock lockObj, Action operation, String operationName, TimeSpan timeout) in /tmp/KuduLite/Kudu.Contracts/Infrastructure/LockExtensions.cs:line 46
+   at Kudu.Core.Deployment.FetchDeploymentManager.&lt;&gt;c__DisplayClass22_0.&lt;PerformBackgroundDeployment&gt;b__1() in /tmp/KuduLite/Kudu.Core/Deployment/FetchDeploymentManager.cs:line 393" innerText="Deployment failed" innerStackTrace="   at Kudu.Core.Deployment.DeploymentManager.DeployAsync(IRepository repository, ChangeSet changeSet, String deployer, Boolean clean, DeploymentInfoBase deploymentInfo, Boolean needFileUpdate, Boolean fullBuildByDefault) in /tmp/KuduLite/Kudu.Core/Deployment/DeploymentManager.cs:line 307
+   at Kudu.Core.Deployment.FetchDeploymentManager.PerformDeployment(DeploymentInfoBase deploymentInfo, IDisposable tempDeployment, ChangeSet tempChangeSet, DeployStatusApiResult updateStatusObj) in /tmp/KuduLite/Kudu.Core/Deployment/FetchDeploymentManager.cs:line 230" /><!-- duration: 18ms -->
+    </step><!-- duration: 1009656ms -->

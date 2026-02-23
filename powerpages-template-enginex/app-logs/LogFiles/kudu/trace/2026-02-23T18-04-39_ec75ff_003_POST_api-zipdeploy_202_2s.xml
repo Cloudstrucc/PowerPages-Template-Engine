@@ -1,0 +1,15 @@
+<step title="Incoming Request" date="2026-02-23T18:04:39.852" instance="ec75ff" url="/api/zipdeploy?isAsync=true" method="POST" type="request" pid="839,1,18" Accept="*/*" Host="powerpages-engine-0e2065.scm.azurewebsites.net" User-Agent="AZURECLI/2.82.0 (HOMEBREW)" Accept-Encoding="gzip, deflate" Authorization="Bea..." Cache-Control="no-cache" Content-Type="application/octet-stream" Content-Length="166195" x-ms-client-request-id="1df154ca-10e2-11f1-a6de-1a2eff4150bc" x-ms-artifact-checksum="5bc1f5fa00f8acb2ac1241dadb20ba80fff9d0ae6f3f0e8e296720f9818980f4" X-ARR-LOG-ID="1df154ca-10e2-11f1-a6de-1a2eff4150bc" CLIENT-IP="142.126.196.143:58549" X-SITE-DEPLOYMENT-ID="powerpages-engine-0e2065" WAS-DEFAULT-HOSTNAME="powerpages-engine-0e2065.scm.azurewebsites.net" X-Forwarded-Proto="https" X-AppService-Proto="https" X-Forwarded-TlsVersion="1.3" X-WAWS-Unencoded-URL="/api/zipdeploy?isAsync=true" X-Client-IP="142.126.196.143" X-Client-Port="58549" >
+  <step title="Cleanup Xml Logs" date="2026-02-23T18:04:39.902" /><!-- duration: 41ms -->
+  <step title="ZipPushDeploy" date="2026-02-23T18:04:40.351" >
+    <step title="ZipDeploy. Extract zip. Remote build." date="2026-02-23T18:04:40.429" /><!-- duration: 3ms -->
+    <step title="Starting PushDeployAsync" date="2026-02-23T18:04:40.451" /><!-- duration: 10ms -->
+    <step title="Writing artifact to /tmp/zipdeploy/99c95a2c-fb47-41f0-b8a9-fc603b6f5060.zip" date="2026-02-23T18:04:40.520" >
+      <step title="Writing multipart request body to /tmp/zipdeploy/99c95a2c-fb47-41f0-b8a9-fc603b6f5060.zip" date="2026-02-23T18:04:40.540" /><!-- duration: 10ms -->
+    </step><!-- duration: 142ms -->
+    <step title="Start deployment in the background" date="2026-02-23T18:04:40.722" >
+      <step title="Acquiring Deployment Lock" date="2026-02-23T18:04:40.833" /><!-- duration: 35ms -->
+      <step title="Acquired Deployment Lock" date="2026-02-23T18:04:40.987" /><!-- duration: 20ms -->
+    </step><!-- duration: 785ms -->
+  </step><!-- duration: 1425ms -->
+  <step title="Outgoing response" date="2026-02-23T18:04:42.088" type="response" statusCode="202" statusText="Accepted" /><!-- duration: 36ms -->
+</step><!-- duration: 2276ms -->
